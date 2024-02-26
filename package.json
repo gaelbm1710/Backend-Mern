@@ -1,0 +1,24 @@
+{
+  "name": "web-formulas-api",
+  "version": "0.0.1",
+  "description": "Es la api para las formulas nuevas",
+  "main": "index.js",
+  "author": "Carlo Gael Bañuelos Maldonado",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^0.1.0",
+    "connect-multiparty": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.0",
+    "mongoose-paginate": "^5.0.3",
+    "mongoose-paginate-v2": "^1.8.0",
+    "nodemon": "^3.0.3"
+  }
+}
