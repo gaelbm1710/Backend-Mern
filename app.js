@@ -32,3 +32,4 @@ app.use(`/api/${API_VERSION}`, newsletterRoute);
 
 
 module.exports = app;
+
