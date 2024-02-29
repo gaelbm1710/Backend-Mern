@@ -11,6 +11,7 @@ const menuRoutes = require("./router/menu");
 const courseRoutes = require("./router/course");
 const postRoutes = require("./router/post");
 const newsletterRoute = require("./router/newsletter");
+const magistrales = require("./router/magistrales");
 
 //Body-Parse
 app.use(bodyParser.urlencoded({extended: true}));
@@ -29,6 +30,7 @@ app.use(`/api/${API_VERSION}`, menuRoutes);
 app.use(`/api/${API_VERSION}`, courseRoutes);
 app.use(`/api/${API_VERSION}`, postRoutes);
 app.use(`/api/${API_VERSION}`, newsletterRoute);
+app.use(`/api/${API_VERSION}`, magistrales);
 
 
 module.exports = app;
