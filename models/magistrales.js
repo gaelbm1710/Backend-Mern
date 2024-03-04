@@ -37,6 +37,7 @@ const MagSchema = mongoose.Schema({
     comInt: String,
     caducidad: Number,
     excl: Boolean,
+    comClie: String,
 });
 
 MagSchema.plugin(mongoosePaginate);
