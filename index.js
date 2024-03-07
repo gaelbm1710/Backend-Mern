@@ -10,7 +10,7 @@ const{
     PG_CONEXION 
 } = require("./constants");
 
-const PORT = process.env.POST || 3977
+const PORT = process.env.POST || 8080;
 
 const connectDB = async () => {
   try {
