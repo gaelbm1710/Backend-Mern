@@ -9,5 +9,6 @@ api.get("/mag",MagController.getMag);
 api.patch("/mag/:id",[md_auth.asureAuth], MagController.updateMag);
 api.delete("/mag/:id",[md_auth.asureAuth],MagController.deleteMag);
 api.get("/mag/:cardcode",MagController.getMagi);
+api.post("/magi",[md_auth.asureAuth], MagController.createMagi);
 
 module.exports=api;

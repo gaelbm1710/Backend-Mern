@@ -3,11 +3,11 @@ const Mag = require("../models/magistrales");
 async function createMag(req, res){
     try {
         const mag = new Mag(req.body);
-        mag.created_at = new Date();
-        const magStored = await mag.save();
-        res.status(200).send(magStored);
+        const magiStored = await mag.save();
+        mag.created_at=new Date();
+        res.status(200).send({msg:"Cotizacion Creada: ",magiStored})
     } catch (error) {
-        res.status(400).send({msg:"Error al crear la cotización", error})
+        res.status(400).send({msg: "Error al crear cotización"});
     }
 }
 
@@ -71,10 +71,22 @@ async function getMagi(req,res){
     }
 }
 
+async function createMagi(req, res){
+    try {
+        const mag = new Mag(req.body);
+        const magiStored = await mag.save();
+        mag.created_at=new Date();
+        res.status(200).send({msg:"Cotizacion Creada: ",magiStored})
+    } catch (error) {
+        res.status(400).send({msg: "Error al crear cotización"});
+    }
+}
+
 module.exports={
     createMag,
     getMag,
     updateMag,
     deleteMag,
     getMagi,
+    createMagi,
 }
