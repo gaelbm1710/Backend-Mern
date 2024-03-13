@@ -17,8 +17,11 @@ const magistrales = require("./router/magistrales");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+
 //configurar uploads
 app.use(express.static("uploads"));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 //Cors
 app.use(cors());

@@ -2,10 +2,14 @@ const Mag = require("../models/magistrales");
 
 async function createMag(req, res){
     try {
+        console.log(req.body);
         const mag = new Mag(req.body);
-        const magiStored = await mag.save();
         mag.created_at=new Date();
+        console.log("Esto es el primer mag:",mag);
+        const magiStored = await mag.save();
+        console.log("Esto es mag",mag);
         res.status(200).send({msg:"Cotizacion Creada: ",magiStored})
+        console.log("Esto es magiStored",magiStored);
     } catch (error) {
         res.status(400).send({msg: "Error al crear cotización"});
     }
@@ -56,18 +60,17 @@ async function deleteMag(req,res){
     }
 }
 
-async function getMagi(req,res){
+async function getMagbyCardcode(req,res){
     try {
         const {cardcode} = req.params;
-        const magStored = await Mag.find({cardcode});
-        if(!magStored){
-            return res.status(404).send({msg: "Cotización no encontrada"});
+        const cotiStored = await Mag.find({cardcode});
+        if(!cotiStored){
+            return res.status(404).send({msg: "Cotización no encontradas"})
         }
-        res.status(200).send(magStored);
+        res.status(200).send(cotiStored)
     } catch (error) {
-        console.error("Error: ",error);
-        res.status(500).send({msg: "Error en el servidor"})
-        
+        console.log("Error: ",error);
+        res.status(500).send({msg:"Error en el servidor"})
     }
 }
 
@@ -81,12 +84,29 @@ async function createMagi(req, res){
         res.status(400).send({msg: "Error al crear cotización"});
     }
 }
+async function getMagbyAsesor(req, res) {
+    try {
+        const { asesor } = req.params;
+        const cotiStored = await Mag.find({ asesor }).populate('asesor');
+        if (cotiStored.length === 0) {
+            return res.status(404).send({ msg: "Cotizaciones no encontradas" });
+        }
+        res.status(200).send(cotiStored);
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).send({ msg: "Error en el servidor" });
+    }
+}
+
+
+
 
 module.exports={
     createMag,
     getMag,
     updateMag,
     deleteMag,
-    getMagi,
+    getMagbyCardcode,
     createMagi,
+    getMagbyAsesor,
 }

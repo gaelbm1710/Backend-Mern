@@ -5,7 +5,10 @@ const MagSchema = mongoose.Schema({
     folio_IyD: Number,
     folio_Op: Number,
     folio_sCom: Number,
-    asesor: String,
+    asesor: {
+        type: String,
+        ref: 'User'
+    },
     cardcode: String,
     base: String,
     activos: String,
@@ -38,6 +41,7 @@ const MagSchema = mongoose.Schema({
     caducidad: Number,
     excl: Boolean,
     comClie: String,
+    StatusGeneral: Boolean,
 });
 
 MagSchema.plugin(mongoosePaginate);
