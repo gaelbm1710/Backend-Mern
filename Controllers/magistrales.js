@@ -2,14 +2,15 @@ const Mag = require("../models/magistrales");
 
 async function createMag(req, res){
     try {
-        console.log(req.body);
-        const mag = new Mag(req.body);
+        const mag = new Mag({...req.body, necesita_muestra: false, existe: false, 
+            sIyD: false, sOp: false, sCom: false, refri: false,
+            receta: false, excl: false, StatusGeneral: false})
         mag.created_at=new Date();
-        console.log("Esto es el primer mag:",mag);
+        //console.log("Esto es el primer mag:",mag);
         const magiStored = await mag.save();
-        console.log("Esto es mag",mag);
+        //console.log("Esto es mag",mag);
         res.status(200).send({msg:"Cotizacion Creada: ",magiStored})
-        console.log("Esto es magiStored",magiStored);
+        //console.log("Esto es magiStored",magiStored);
     } catch (error) {
         res.status(400).send({msg: "Error al crear cotización"});
     }
@@ -34,6 +35,8 @@ async function updateMag(req,res){
     try {
         const {id} = req.params;
         const magData = req.body;
+        magData.sIyD = true;
+        magData.StatusGeneral = false;
         const updateMag = await Mag.findByIdAndUpdate({ _id: id}, magData, {new: true});
         if(!updateMag){
             res.status(404).send({msg: "Cotización no encontrada"})
@@ -98,6 +101,21 @@ async function getMagbyAsesor(req, res) {
     }
 }
 
+async function getMagbyActvidad(req,res){
+    console.log(req.params);
+    try {
+        const {actividad} = req.params;
+        const cotiStored = await Mag.find({actividad});
+        console.log(cotiStored);
+        if(!cotiStored){
+            return res.status(404).send({msg: "Cotización no encontradas"})
+        }
+        res.status(200).send(cotiStored)
+    } catch (error) {
+        console.log("Error: ",error);
+        res.status(500).send({msg:"Error en el servidor"})
+    }
+}
 
 
 
@@ -109,4 +127,5 @@ module.exports={
     getMagbyCardcode,
     createMagi,
     getMagbyAsesor,
+    getMagbyActvidad,
 }

@@ -29,7 +29,7 @@ const connectDB = async () => {
 
 const connectPG = async () =>{
   try {
-    const pool = new Pool(PG_CONEXION)
+    const pool = new Pool({user:PG_CONEXION.PG_USER, host:PG_CONEXION.PG_HOST, database:PG_CONEXION.PG_DATABASE, password:PG_CONEXION.PG_PASSWORD, port:PG_CONEXION.PG_PORT});
     console.log('La conexión con la base de datos POSTGRESQL ha sido exitosa.');
   } catch (error) {
     console.log("Error al conectarse a la base de datos de PostgreSQL ", error);

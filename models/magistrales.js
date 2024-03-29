@@ -42,6 +42,7 @@ const MagSchema = mongoose.Schema({
     excl: Boolean,
     comClie: String,
     StatusGeneral: Boolean,
+    actividad: String
 });
 
 MagSchema.plugin(mongoosePaginate);

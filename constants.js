@@ -18,12 +18,14 @@ const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
 const mongoDBString="mongodb+srv://<user>:<password>@kaapadb-prod.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 */
 //conexion a Postgresql
-const PG_CONEXION = {
+const {Pool} = require('pg');
+const PG_CONEXION = new Pool({
     PG_USER:"carlo_banuelos@omicrondxpprod",
     PG_PASSWORD: "QK5aV315J5",
     PG_HOST: "omicrondxpprod.postgres.database.azure.com",
     PG_DATABASE: "omicron_dxp",
-}
+    PG_PORT: 5432,
+})
 
 
 module.exports={
@@ -33,5 +35,5 @@ module.exports={
     API_VERSION,
     IP_SERVER,
     JWT_SECRET_KEY,
-    PG_CONEXION
+    PG_CONEXION,
 };

@@ -8,23 +8,28 @@ api.post("/mag",[md_auth.asureAuth], MagController.createMag);
 api.get("/mag",MagController.getMag);
 api.patch("/mag/:id",[md_auth.asureAuth], MagController.updateMag);
 api.delete("/mag/:id",[md_auth.asureAuth],MagController.deleteMag);
-api.get("/mag/:cardcode",MagController.getMagbyCardcode);
-api.get("/mag/:asesor",MagController.getMagbyAsesor);
+api.get("/mag/cardcode/:cardcode",MagController.getMagbyCardcode);
+api.get("/mag/asesor/:asesor",MagController.getMagbyAsesor);
+api.get("/mag/actividad/:actividad",MagController.getMagbyActvidad);
+
 
 //OPERACIONES
 api.post("/ope",[md_auth.asureAuth], MagController.createMag);
 api.get("/ope",MagController.getMag);
 api.patch("/ope/:id",[md_auth.asureAuth], MagController.updateMag);
 api.delete("/ope/:id",[md_auth.asureAuth],MagController.deleteMag);
-api.get("/ope/:cardcode",MagController.getMagbyCardcode);
-api.get("/ope/:asesor",MagController.getMagbyAsesor);
+api.get("/ope/cardcode/:cardcode",MagController.getMagbyCardcode);
+api.get("/ope/asesor/:asesor",MagController.getMagbyAsesor);
+api.get("/ope/actividad/:actividad",MagController.getMagbyActvidad);
 
 //Comercial o Marcela jejej :D
 api.post("/come",[md_auth.asureAuth], MagController.createMag);
 api.get("/come",MagController.getMag);
 api.patch("/come/:id",[md_auth.asureAuth], MagController.updateMag);
 api.delete("/come/:id",[md_auth.asureAuth],MagController.deleteMag);
-api.get("/come/:cardcode",MagController.getMagbyCardcode);
-api.get("/come/:asesor",MagController.getMagbyAsesor);
+api.get("/come/cardcode/:cardcode",MagController.getMagbyCardcode);
+api.get("/come/asesor/:asesor",MagController.getMagbyAsesor);
+api.get("/come/asesor/:actividad",MagController.getMagbyActvidad);
+
 
 module.exports=api;
