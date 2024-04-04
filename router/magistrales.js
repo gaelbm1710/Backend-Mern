@@ -11,6 +11,7 @@ api.delete("/mag/:id",[md_auth.asureAuth],MagController.deleteMag);
 api.get("/mag/cardcode/:cardcode",MagController.getMagbyCardcode);
 api.get("/mag/asesor/:asesor",MagController.getMagbyAsesor);
 api.get("/mag/actividad/:actividad",MagController.getMagbyActvidad);
+api.get("/mags",MagController.getMagbyActvidadyAsesor);
 
 
 //OPERACIONES
@@ -21,6 +22,8 @@ api.delete("/ope/:id",[md_auth.asureAuth],MagController.deleteMag);
 api.get("/ope/cardcode/:cardcode",MagController.getMagbyCardcode);
 api.get("/ope/asesor/:asesor",MagController.getMagbyAsesor);
 api.get("/ope/actividad/:actividad",MagController.getMagbyActvidad);
+api.get("/opes",MagController.getMagbyActvidadyAsesor);
+
 
 //Comercial o Marcela jejej :D
 api.post("/come",[md_auth.asureAuth], MagController.createMag);
@@ -30,6 +33,7 @@ api.delete("/come/:id",[md_auth.asureAuth],MagController.deleteMag);
 api.get("/come/cardcode/:cardcode",MagController.getMagbyCardcode);
 api.get("/come/asesor/:asesor",MagController.getMagbyAsesor);
 api.get("/come/asesor/:actividad",MagController.getMagbyActvidad);
+api.get("/comes",MagController.getMagbyActvidadyAsesor);
 
 
 module.exports=api;

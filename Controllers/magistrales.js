@@ -1,3 +1,4 @@
+const { query } = require("express");
 const Mag = require("../models/magistrales");
 
 async function createMag(req, res){
@@ -117,6 +118,33 @@ async function getMagbyActvidad(req,res){
     }
 }
 
+async function getMagbyActvidadyAsesor(req,res){
+    try {
+        const {page = 1, limit = 10, actividad, asesor} = req.query;
+        let query={};
+        const options = {
+        page,
+        limit: parseInt(limit),
+        };
+        if(actividad){
+            query.actividad=actividad;
+        }
+        if(asesor){
+            query.asesor=asesor;
+        }
+        Mag.paginate(query, options, (error, mags)=>{
+            if(error){
+                res.status(400).send({msg: "Error al obtener la información", error})
+            }else{
+                res.status(200).send(mags);
+            }
+        });
+    } catch (error) {
+        console.log("Error: ",error);
+        res.status(500).send({msg:"Error en el servidor"})
+    }
+}
+
 
 
 module.exports={
@@ -128,4 +156,5 @@ module.exports={
     createMagi,
     getMagbyAsesor,
     getMagbyActvidad,
+    getMagbyActvidadyAsesor,
 }
