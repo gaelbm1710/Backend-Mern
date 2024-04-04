@@ -7,7 +7,6 @@ const{
     DB_HOST,
     API_VERSION,
     IP_SERVER,
-    PG_CONEXION 
 } = require("./constants");
 
 const PORT = process.env.POST || 8080;
@@ -27,17 +26,7 @@ const connectDB = async () => {
 }
 
 
-const connectPG = async () =>{
-  try {
-    const pool = new Pool({user:PG_CONEXION.PG_USER, host:PG_CONEXION.PG_HOST, database:PG_CONEXION.PG_DATABASE, password:PG_CONEXION.PG_PASSWORD, port:PG_CONEXION.PG_PORT});
-    console.log('La conexión con la base de datos POSTGRESQL ha sido exitosa.');
-  } catch (error) {
-    console.log("Error al conectarse a la base de datos de PostgreSQL ", error);
-  }
-}
-
 connectDB();
-connectPG();
 
 app.get("/",(req, res) =>{
   res.send("Si jala")
