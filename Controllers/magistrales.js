@@ -3,9 +3,9 @@ const Mag = require("../models/magistrales");
 
 async function createMag(req, res){
     try {
-        const mag = new Mag({...req.body, necesita_muestra: false, existe: false, 
+        const mag = new Mag({...req.body, 
             sIyD: false, sOp: false, sCom: false, refri: false,
-            receta: false, excl: false, StatusGeneral: false})
+            receta: false, StatusGeneral: false})
         mag.created_at=new Date();
         //console.log("Esto es el primer mag:",mag);
         const magiStored = await mag.save();

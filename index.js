@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const app = require("./app");
-const {Pool} =  require("pg")
 const{
     DB_USER,
     DB_PASSWORD,

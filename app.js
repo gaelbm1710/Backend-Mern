@@ -13,6 +13,7 @@ const postRoutes = require("./router/post");
 const newsletterRoute = require("./router/newsletter");
 const magistrales = require("./router/magistrales");
 const contabilidad = require("./router/contabilidad");
+const soporte = require("./router/soporte");
 
 //Body-Parse
 app.use(bodyParser.urlencoded({extended: true}));
@@ -36,7 +37,7 @@ app.use(`/api/${API_VERSION}`, postRoutes);
 app.use(`/api/${API_VERSION}`, newsletterRoute);
 app.use(`/api/${API_VERSION}`, magistrales);
 app.use(`/api/${API_VERSION}`, contabilidad);
-
+app.use(`/api/${API_VERSION}`, soporte);
 
 module.exports = app;
 
