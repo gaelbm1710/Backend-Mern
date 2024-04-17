@@ -54,18 +54,18 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
       
-      - name: Login to Azure
-        uses: azure/login@v1
+      - name: Login to Azure     
+        uses: azure/login@v1     
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_49DDC4771C234178A8A46B87454F1C46 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_EF44C500574F4FD29943C2140D405099 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E2C7C386689B4B62978FD9B93DDA05B1 }}
-
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+      
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'kaapa-backend'
+          app-name: 'Kaapa'
           slot-name: 'Production'
-          package: .
-          
+          package: . 
+        
