@@ -7,6 +7,7 @@ const API_VERSION = "v1";
 const IP_SERVER="localhost";
 const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
 const mongoDBString="mongodb+srv://<user>:<password>@kaapadb-prod.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+const Apisendgrind = "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";
 const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
 
 */
@@ -19,6 +20,7 @@ const API_VERSION = "v1";
 const IP_SERVER="localhost";
 const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
 const mongoDBString="mongodb+srv://<user>:<password>@kaapadb-mongo.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+const Apisendgrind = "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";
 const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
 
 
@@ -60,5 +62,6 @@ module.exports={
         acquire: 30000,
         idle: 1000
     },
+    Apisendgrind,
     Email
 };
