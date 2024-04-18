@@ -28,7 +28,7 @@ const saveUser = async () =>{
     const admins = await User.find({role: "admin"});
     const adminsEmails = admins.map(admin => admin.email)
     try{
-        sendgrid.setApiKey(Apisendgrind);
+        sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
         const msg = {
             to: adminsEmails,
             from: {
