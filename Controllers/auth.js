@@ -1,6 +1,9 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("../utils/jwt");
+const sendgrid = require('@sendgrid/mail');
+const {Apisendgrind, Email} = require('../constants')
+
 
 function register(req,res){
 const {firstname, lastname, email, password} = req.body;
@@ -22,13 +25,42 @@ const hashPassword = bcrypt.hashSync(password, salt);
 user.password = hashPassword;
 
 const saveUser = async () =>{
+    const admins = await User.find({role: "admin"});
+    const adminsEmails = admins.map(admin => admin.email)
     try{
+        sendgrid.setApiKey(Apisendgrind);
+        const msg = {
+            to: adminsEmails,
+            from: {
+                name: 'Kaapa Notifica',
+                email: Email
+            },
+            subject: 'Registro de Usuario',
+            text: 'Un ususario quiere accesar a Kaapa',
+            html: '<strong>Un ususario quiere accesar a Kaapa</strong>',
+        }
+        const sendMail = async () =>{
+            try {
+                await sendgrid.send(msg);
+                console.log('Correo enviado de registro');
+            } catch (error) {
+                console.error(error);
+                if(error.response){
+                    console.error(error.response.body)
+                }
+            }
+        }
+        sendMail();
         await user.save();
         res.status(200).send({msg:"Usuario Creado con Exito"});
+        
     }
     catch(error){
         res.status(400).send({msg: "Error al crear usuario"});
-        console.log("Error del servidor", error);
+        console.error("Error del servidor", error);
+        if(!res.headersSent){
+            res.status(500).send({msg:"Error al crear usuario"})
+        }
     }
 }
 saveUser();

@@ -12,6 +12,7 @@ api.get("/users", [md_auth.asureAuth],UserController.getUsers);
 api.post("/user",[md_auth.asureAuth, md_upload],UserController.createUser);
 api.patch("/user/:id",[md_auth.asureAuth, md_upload],UserController.updateUser);
 api.delete("/user/:id", [md_auth.asureAuth],UserController.deleteUser);
-
+api.get("/user/:role",UserController.getAdmins);
+api.get("/userss",UserController.getUsers);
 
 module.exports = api;

@@ -27,6 +27,22 @@ if(active === undefined){
     res.status(200).send(response);
 }
 
+async function getAdmins(req,res){
+   const { role } = req.query;
+   let query = {};
+   if(active != undefined){
+    query.role = role;
+   }
+   try {
+    const response = await User.find(query);
+    console.log(response);
+    res.status(200).send(response);
+   } catch (error) {
+    console.error("Error al obtener usuarios", error);
+    res.status(500).send({msg:"Errror al obtener usuarios"})
+   }
+}
+
 async function createUser(req,res){
     const {password} = req.body;
     const user = new User({...req.body, active: false});
@@ -94,5 +110,6 @@ module.exports={
     getUsers,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getAdmins
 }
