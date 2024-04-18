@@ -34,11 +34,11 @@ const PG_CONEXION = new Pool({
 })
 */
 //Prueba a Conexion a Postgresql
-const PG_USER = "carlo_banuelos@omicrondxpprod";
-const PG_PASSWORD = "QK5aV315J5";
-const PG_HOST = "omicrondxpprod.postgres.database.azure.com";
-const PG_DATABASE = "omicron_dxp";
-const PG_PORT = 5432
+const PG_USER = process.env.PG_USER;
+const PG_PASSWORD = process.env.PG_PASSWORD;
+const PG_HOST = process.env.PG_HOST;
+const PG_DATABASE = process.env.PG_DATABASE;
+const PG_PORT = process.env.PG_PORT;
 
 
 
