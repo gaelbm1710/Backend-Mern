@@ -2,7 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("../utils/jwt");
 const sendgrid = require('@sendgrid/mail');
-const {Apisendgrind, Email} = require('../constants')
+const {apisendgrind, Email} = require('../constants')
 
 
 function register(req,res){
@@ -28,7 +28,7 @@ const saveUser = async () =>{
     const admins = await User.find({role: "admin"});
     const adminsEmails = admins.map(admin => admin.email)
     try{
-        sendgrid.setApiKey(Apisendgrind);
+        sendgrid.setApiKey(apisendgrind);
         const msg = {
             to: adminsEmails,
             from: {
