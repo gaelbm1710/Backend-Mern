@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const {API_VERSION} = require("./constants");
 const cors = require("cors");
 const app = express();
+require('dotenv').config();
+
 
 //Importar rutas
 const authRoutes = require("./router/auth");
