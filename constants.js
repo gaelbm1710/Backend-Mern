@@ -7,6 +7,7 @@ const API_VERSION = "v1";
 const IP_SERVER="localhost";
 const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
 const mongoDBString="mongodb+srv://<user>:<password>@kaapadb-prod.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+const Apisendgrind = process.env.SENDGRID_API_KEY;
 const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
 
 */
