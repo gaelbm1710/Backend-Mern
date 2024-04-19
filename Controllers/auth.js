@@ -5,6 +5,7 @@ const sendgrid = require('@sendgrid/mail');
 const {Apisendgrind, Email, TEMPLATE_ID} = require('../constants')
 
 
+
 function register(req,res){
 const {firstname, lastname, email, password} = req.body;
 
@@ -29,7 +30,7 @@ const saveUser = async () =>{
     const adminsEmails = admins.map(admin => admin.email)
     try{
         sendgrid.setApiKey(Apisendgrind);
-        const msg = {
+        const registro = {
             to: adminsEmails,
             from: {
                 name: 'Kaapa Notifica',
@@ -39,7 +40,7 @@ const saveUser = async () =>{
         }
         const sendMail = async () =>{
             try {
-                await sendgrid.send(msg);
+                await sendgrid.send(registro);
                 console.log('Correo enviado de registro');
             } catch (error) {
                 console.error(error);
@@ -51,7 +52,6 @@ const saveUser = async () =>{
         sendMail();
         await user.save();
         res.status(200).send({msg:"Usuario Creado con Exito"});
-        
     }
     catch(error){
         res.status(400).send({msg: "Error al crear usuario"});
