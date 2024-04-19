@@ -24,8 +24,6 @@ async function getUsers(req, res) {
     } else {
         response = await User.find({ active })
     }
-    console.log(response);
-
     res.status(200).send(response);
 }
 
@@ -94,7 +92,7 @@ async function updateUser(req, res) {
         await User.findByIdAndUpdate({ _id: id }, userData);
         if (wasActive === false && isActive === true) {
             const activacion = {
-                to: user.email,
+                to: [user.email],
                 from: {
                     name: 'Kaapa Notifica',
                     email: Email
