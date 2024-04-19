@@ -72,12 +72,6 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
     const { id } = req.params;
     const userData = req.body;
-    const wasActive = user.active;
-    const isActive = userData.active
-    const user = await User.findById(id);
-        if(!user){
-            return res.status(404).send({msg:"Usuario no encontrado"});
-        }
     if (userData.password) {
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = bcrypt.hashSync(userData.password, salt);
@@ -91,33 +85,38 @@ async function updateUser(req, res) {
         userData.avatar = imagePath
     }
     try {
+        const user = await User.findById(id)
+        if (!user) {
+            res.status(404).send({ msg: "Error al buscar el usuario" })
+        }
+        const wasActive = user.active;
+        const isActive = userData.active;
+        await User.findByIdAndUpdate({ _id: id }, userData);
         if (wasActive === false && isActive === true) {
-            sendgrid.setApiKey(Apisendgrind);
             const activacion = {
-                to: user.email,
+                to: [user.email],
                 from: {
                     name: 'Kaapa Notifica',
                     email: Email
                 },
-                subject: 'Tu usuario ha sido Activado',
-                text: 'Bienvenido a Kaapa. Ahora podrás realizar algunos de tus flujos de trabajo',
-                html: '<strong>Bienvenido a Kaapa. Ahora podrás realizar algunos de tus flujos de trabajo</strong>'
+                subject: 'Tu usario se ha Activado',
+                text: 'Bienvenido a Kaapa. Tu usuario ya está activo.',
+                html: '<strong>Bienvenido a Kaapa. Tu usuario ya está activo.</strong>'
             }
             const sendMail = async () => {
                 try {
                     await sendgrid.send(activacion);
-                    console.log("Correo de Activacion");
+                    console.log("Correo enviado de activación");
                 } catch (error) {
                     console.error(error);
                     if (error.response) {
-                        console.error(error.response.body)
+                        console.error(error.response.body);
                     }
                 }
             }
             sendMail();
-            await User.findByIdAndUpdate({ _id: id }, userData);
-            res.status(200).send({ msg: "Actualizacion correcta" });
         }
+        res.status(200).send({ msg: "Actualizacion correcta" });
     } catch (error) {
         res.status(400).send({ msg: "Error al actualizar el usuario" });
     }
