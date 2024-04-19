@@ -2,8 +2,8 @@ const { response } = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const image = require("../utils/image");
-const { Apisendgrind, Email } = require("../constants");
 const sendgrid = require('@sendgrid/mail');
+const { Apisendgrind, Email } = require("../constants")
 
 async function getMe(req, res) {
     const { user_id } = req.user;
@@ -24,6 +24,8 @@ async function getUsers(req, res) {
     } else {
         response = await User.find({ active })
     }
+    console.log(response);
+
     res.status(200).send(response);
 }
 
@@ -83,39 +85,8 @@ async function updateUser(req, res) {
         userData.avatar = imagePath
     }
     try {
-        const user = await User.findById(id)
-        if (!user) {
-            res.status(404).send({ msg: "Error al buscar el usuario" })
-        }
-        const wasActive = user.active;
-        const isActive = userData.active;
-        const updateUser = await User.findByIdAndUpdate({ _id: id }, userData);
-        if (wasActive === false && isActive === true) {
-            const activacion = {
-                to: userData.email,
-                from: {
-                    name: 'Kaapa Notifica',
-                    email: Email
-                },
-                subject: 'Tu usario se ha Activado',
-                text: 'Bienvenido a Kaapa. Tu usuario ya está activo.',
-                html: '<strong>Bienvenido a Kaapa. Tu usuario ya está activo.</strong>'
-            }
-            const sendMail = async () => {
-                try {
-                    await sendgrid.send(activacion);
-                    console.log("Correo enviado de activación", isActive, " + ", wasActive);
-                    console.log(updateUser.email);
-                } catch (error) {
-                    console.error(error);
-                    if (error.response) {
-                        console.error(error.response.body);
-                    }
-                }
-            }
-            sendMail();
-            res.status(200).send({ msg: "Actualizacion correcta" });
-        }
+        await User.findByIdAndUpdate({ _id: id }, userData);
+        res.status(200).send({ msg: "Actualizacion correcta" });
     } catch (error) {
         res.status(400).send({ msg: "Error al actualizar el usuario" });
     }
@@ -136,11 +107,52 @@ async function deleteUser(req, res) {
     }
 }
 
+async function updateActive(req, res) {
+    const { id } = req.params;
+    const { active } = req.body;
+    if (typeof active !== 'boolean') {
+        return res.status(400).send({ msg: "El campo 'active' debe ser de tipo booleano." });
+    }
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).send({ msg: "Usuario no encontrado" });
+        }
+        if (user.active === active) {
+            return res.status(200).send({ msg: "No hay cambios en el estado 'active'." });
+        }
+        const mensaje = {
+            to: user.email,
+            from: {
+                name: 'Kaapa Notifica',
+                email: Email
+            },
+            subject: 'Activación de cuenta en Kaapa',
+            text: 'Bienvenido a Kaapa. Se ha activado tu cuenta.',
+            html: '<strong>Bienvenido a Kaapa. Tu cuenta ha sido activada.</strong>'
+        };
+        try {
+            await sendgrid.send(mensaje);
+            console.log('Correo de activación enviado a:', user.email);
+        } catch (error) {
+            console.error('Error al enviar el correo de activación:', error);
+            return res.status(500).send({ msg: "Error al enviar el correo de activación" });
+        }
+        user.active = active;
+        await user.save();
+        res.status(200).send({ msg: "Actualización correcta" });
+    } catch (error) {
+        console.error("Error al actualizar:", error);
+        res.status(500).send({ msg: "Error al actualizar" });
+    }
+}
+
 module.exports = {
     getMe,
     getUsers,
     createUser,
     updateUser,
     deleteUser,
-    getAdmins
+    getAdmins,
+    updateActive
 }
