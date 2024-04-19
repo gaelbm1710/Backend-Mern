@@ -41,7 +41,7 @@ const PG_USER = process.env.PG_USER;
 const PG_PASSWORD = process.env.PG_PASSWORD;
 const PG_HOST = process.env.PG_HOST;
 const PG_DATABASE = process.env.PG_DATABASE;
-const PG_PORT = process.env.PG_PORT;
+const PG_PORT = process.env.PG_PORT; 
 
 
 
