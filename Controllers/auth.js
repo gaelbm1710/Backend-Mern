@@ -2,7 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("../utils/jwt");
 const sendgrid = require('@sendgrid/mail');
-const {Apisendgrind, Email} = require('../constants')
+const {Apisendgrind, Email, TEMPLATE_ID} = require('../constants')
 
 
 function register(req,res){
@@ -35,9 +35,7 @@ const saveUser = async () =>{
                 name: 'Kaapa Notifica',
                 email: Email
             },
-            subject: 'Registro de Usuario',
-            text: 'Un ususario quiere accesar a Kaapa',
-            html: '<strong>Un ususario quiere accesar a Kaapa</strong>',
+            templateId: TEMPLATE_ID
         }
         const sendMail = async () =>{
             try {

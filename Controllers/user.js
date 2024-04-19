@@ -104,7 +104,11 @@ async function deleteUser(req,res){
         res.status(500).send({msg:"Error al eliminar usuario"});
     }
 }
+/*
+async function activarUsuario(req,res){
 
+}
+*/
 module.exports={
     getMe,
     getUsers,
