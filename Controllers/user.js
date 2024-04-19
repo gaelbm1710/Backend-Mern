@@ -89,10 +89,10 @@ async function updateUser(req, res) {
         }
         const wasActive = user.active;
         const isActive = userData.active;
-        await User.findByIdAndUpdate({ _id: id }, userData);
+       const updateUser =  await User.findByIdAndUpdate({ _id: id }, userData);
         if (wasActive === false && isActive === true) {
             const activacion = {
-                to: user.email,
+                to: updateUser.email,
                 from: {
                     name: 'Kaapa Notifica',
                     email: Email
@@ -105,7 +105,7 @@ async function updateUser(req, res) {
                 try {
                     await sendgrid.send(activacion);
                     console.log("Correo enviado de activación", isActive, " + ", wasActive);
-                    console.log(user.email);
+                    console.log(updateUser.email);
                 } catch (error) {
                     console.error(error);
                     if (error.response) {
