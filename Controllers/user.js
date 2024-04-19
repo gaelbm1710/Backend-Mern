@@ -89,10 +89,10 @@ async function updateUser(req, res) {
         }
         const wasActive = user.active;
         const isActive = userData.active;
-       const updateUser =  await User.findByIdAndUpdate({ _id: id }, userData);
+        const updateUser = await User.findByIdAndUpdate({ _id: id }, userData);
         if (wasActive === false && isActive === true) {
             const activacion = {
-                to: updateUser.email,
+                to: userData.email,
                 from: {
                     name: 'Kaapa Notifica',
                     email: Email
@@ -114,8 +114,8 @@ async function updateUser(req, res) {
                 }
             }
             sendMail();
+            res.status(200).send({ msg: "Actualizacion correcta" });
         }
-        res.status(200).send({ msg: "Actualizacion correcta" });
     } catch (error) {
         res.status(400).send({ msg: "Error al actualizar el usuario" });
     }
