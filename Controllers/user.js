@@ -74,6 +74,10 @@ async function updateUser(req, res) {
     const userData = req.body;
     const wasActive = user.active;
     const isActive = userData.active
+    const user = await User.findById(id);
+        if(!user){
+            return res.status(404).send({msg:"Usuario no encontrado"});
+        }
     if (userData.password) {
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = bcrypt.hashSync(userData.password, salt);
