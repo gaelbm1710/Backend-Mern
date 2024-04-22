@@ -14,7 +14,7 @@ api.patch("/user/:id",[md_auth.asureAuth, md_upload],UserController.updateUser);
 api.delete("/user/:id", [md_auth.asureAuth],UserController.deleteUser);
 api.get("/user/:role",UserController.getAdmins);
 api.get("/userss",UserController.getUsers);
-api.patch("/userr/:id",[md_auth.asureAuth],UserController.updateActive);
+api.patch("/userr/:id",[md_auth.asureAuth, md_upload],UserController.updateActive);
 
 
 module.exports = api;

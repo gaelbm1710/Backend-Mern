@@ -79,7 +79,8 @@ async function updateUser(req, res) {
     } else {
         delete userData.password;
     }
-
+    console.log(userData.email);
+    console.log(userData);
     if (req.files.avatar) {
         const imagePath = image.getFilePath(req.files.avatar)
         userData.avatar = imagePath
@@ -87,10 +88,60 @@ async function updateUser(req, res) {
     try {
         await User.findByIdAndUpdate({ _id: id }, userData);
         res.status(200).send({ msg: "Actualizacion correcta" });
+        console.log(userData.email);
+        console.log(userData);
     } catch (error) {
         res.status(400).send({ msg: "Error al actualizar el usuario" });
     }
 
+}
+
+async function updateActive(req, res) {
+    const { id } = req.params;
+    const userData = req.body;
+    if (userData.password) {
+        const salt = bcrypt.genSaltSync(10);
+        const hashPassword = bcrypt.hashSync(userData.password, salt);
+        userData.password = hashPassword
+    } else {
+        delete userData.password;
+    }
+    if (req.files.avatar) {
+        const imagePath = image.getFilePath(req.files.avatar)
+        userData.avatar = imagePath
+    }
+    console.log(userData.email);
+    try {
+        sendgrid.setApiKey(Apisendgrind);
+        const activacion = {
+            to: userData.email,
+            from: {
+                name: 'Kaapa Notifica',
+                email: Email
+            },
+            subject: 'Se ha activado tu cuenta',
+            text: 'Bienvenido a Kaapa. Tu cuenta ha sido activada por los Administradores',
+            html: '<strong>Bienvenido a Kaapa. Tu cuenta ha sido activada por los Administradores</strong>'
+        }
+
+        const sendMail = async () => {
+            try {
+                await sendgrid.send(activacion);
+                console.log('Correo de activación enviado');
+            } catch (error) {
+                console.error(error);
+                if (error.response) {
+                    console.error(error.response.body)
+                }
+            }
+        }
+        sendMail();
+        await User.findByIdAndUpdate({ _id: id }, userData);
+        console.log(userData);
+        res.status(200).send({ msg: "Actualizacion correcta" });
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar el usuario" });
+    }
 }
 
 async function deleteUser(req, res) {
@@ -107,45 +158,7 @@ async function deleteUser(req, res) {
     }
 }
 
-async function updateActive(req, res) {
-    const { id } = req.params;
-    const { active } = req.body;
-    if (typeof active !== 'boolean') {
-        return res.status(400).send({ msg: "El campo 'active' debe ser de tipo booleano." });
-    }
-    try {
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).send({ msg: "Usuario no encontrado" });
-        }
-        if (user.active === active) {
-            return res.status(200).send({ msg: "No hay cambios en el estado 'active'." });
-        }
-        const mensaje = {
-            to: user.email,
-            from: {
-                name: 'Kaapa Notifica',
-                email: Email
-            },
-            subject: 'Activación de cuenta en Kaapa',
-            text: 'Bienvenido a Kaapa. Se ha activado tu cuenta.',
-            html: '<strong>Bienvenido a Kaapa. Tu cuenta ha sido activada.</strong>'
-        };
-        try {
-            await sendgrid.send(mensaje);
-            console.log('Correo de activación enviado a:', user.email);
-        } catch (error) {
-            console.error('Error al enviar el correo de activación:', error);
-            return res.status(500).send({ msg: "Error al enviar el correo de activación" });
-        }
-        user.active = active;
-        await user.save();
-        res.status(200).send({ msg: "Actualización correcta" });
-    } catch (error) {
-        console.error("Error al actualizar:", error);
-        res.status(500).send({ msg: "Error al actualizar" });
-    }
-}
+
 
 module.exports = {
     getMe,
