@@ -2,7 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("../utils/jwt");
 const sendgrid = require('@sendgrid/mail');
-const {Apisendgrind, Email, TEMPLATE_ID} = require('../constants')
+const {Apisendgrind, Email, Registro} = require('../constants')
 
 
 
@@ -36,7 +36,7 @@ const saveUser = async () =>{
                 name: 'Kaapa Notifica',
                 email: Email
             },
-            templateId: TEMPLATE_ID
+            templateId: Registro
         }
         const sendMail = async () =>{
             try {

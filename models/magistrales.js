@@ -2,6 +2,10 @@ const mongoose = require("mongoose")
 const mongoosePaginate = require("mongoose-paginate-v2");
 
 const MagSchema = mongoose.Schema({
+    folio: {
+        type: Number,
+        unique: true,
+    },
     folio_IyD: Number,
     folio_Op: Number,
     folio_sCom: Number,
@@ -43,5 +47,19 @@ const MagSchema = mongoose.Schema({
 });
 
 MagSchema.plugin(mongoosePaginate);
+
+MagSchema.pre('save', async function(next) {
+    try {
+        const lastMag = await this.constructor.findOne({}, {}, { sort: { 'folio': -1 } });
+        if (lastMag) {
+            this.folio = lastMag.folio + 1;
+        } else {
+            this.folio = 1;
+        }
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports=mongoose.model("Mag", MagSchema);
