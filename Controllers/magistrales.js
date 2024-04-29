@@ -82,7 +82,7 @@ async function updateMagInyDe(req, res) {
             },
             templateId: PFIYNDE,
             dynamic_template_data: {
-                Folio: magiStored.folio
+                Folio: magData.folio
             }
         }
         const sendMail = async () =>{
