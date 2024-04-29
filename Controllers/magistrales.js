@@ -120,7 +120,7 @@ async function updateMagOpe(req, res) {
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe={
-            to: [comeEmails, magData.asesor],
+            to: [...comeEmails, magData.asesor],
             from:{
                 name:'Cotización Nueva',
                 email: Email
@@ -231,7 +231,7 @@ async function updateMagiInyDe(req, res) {
             },
             templateId: PFIYNDE,
             dynamic_template_data: {
-                Folio: magiStored.folio
+                Folio: magData.folio
             }
         }
         const sendMail = async () =>{
@@ -269,7 +269,10 @@ async function updateMagiOpe(req, res) {
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe={
-            to: [comeEmails, magData.asesor],
+            to: [
+            {email: comeEmails},
+            {email: magData.asesor}
+            ],
             from:{
                 name:'Presentación Nueva',
                 email: Email
@@ -334,7 +337,8 @@ async function updateMagiCome(req, res) {
             },
             templateId: CotizacionFinalizada,
             dynamic_template_data: {
-
+                Folio: magData.folio,
+                Clave: magData.folio_sCom
             }
         }
         const sendMail = async () =>{
@@ -379,7 +383,7 @@ async function updateMagisInyDe(req, res) {
             },
             templateId: PFIYNDE,
             dynamic_template_data: {
-                Folio: magiStored.folio
+                Folio: magData.folio
             }
         }
         const sendMail = async () =>{
@@ -417,7 +421,7 @@ async function updateMagisOpe(req, res) {
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe={
-            to: [comeEmails, magData.asesor],
+            to: [...comeEmails, magData.asesor],
             from:{
                 name:'Presentación Nueva',
                 email: Email
