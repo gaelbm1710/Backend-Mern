@@ -563,15 +563,27 @@ async function getMagbyAsesor(req, res) {
 }
 
 async function getMagbyActvidad(req, res) {
-    console.log(req.params);
     try {
-        const { actividad } = req.params;
-        const cotiStored = await Mag.find({ actividad });
-        console.log(cotiStored);
-        if (!cotiStored) {
-            return res.status(404).send({ msg: "Cotización no encontradas" })
+        const { page = 1, limit = 10, actividad } = req.params;
+        let query = {};
+        const options = {
+            page: parseInt(page),
+            limit: parseInt(limit),
+        };
+        if (actividad) {
+            query.actividad = actividad;
         }
-        res.status(200).send(cotiStored)
+        console.log(options);
+        console.log(actividad);
+        Mag.paginate(query, options, (error, mags) => {
+            if (error) {
+                res.status(400).send({ msg: "Error al obtener la información", error })
+            } else {
+                res.status(200).send(mags);
+                console.log("Opciones: ",options);
+                console.log("Actividad: ",actividad);
+            }
+        });
     } catch (error) {
         console.log("Error: ", error);
         res.status(500).send({ msg: "Error en el servidor" })
