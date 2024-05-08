@@ -28,11 +28,11 @@ const Registro="d-8e8c1968c6ca4f90acaaace0d18116c0";
 const CotizacionNueva = "d-ee0958ca2fbd4f74a12655aadb91732a";
 const PFIYNDE = "d-81d628a74e114e999ad3122b69f1a310";
 const CotizacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
-
+/*
 //Contenedor
 const Almacenamiento = process.env.CONTAINER;
 const AlmacenamientoCompartido = process.env.CONTAINERSHARED;
-
+*/
 
 /*conexion a Postgresql
 const {Pool} = require('pg');
