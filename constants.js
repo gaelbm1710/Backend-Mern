@@ -30,8 +30,8 @@ const PFIYNDE = "d-81d628a74e114e999ad3122b69f1a310";
 const CotizacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
 
 //Contenedor
-const Almacenamiento = process.env.CONTAINER || "DefaultEndpointsProtocol=https;AccountName=kaapaproduction;AccountKey=69/lyZg1L2RL3+v+9R7p20i1F84zO+2zntDln3wMNb2pA84GY+d9ErRlFqBH6IBgOlM1NdNWhkgd+AStLAorGQ==;EndpointSuffix=core.windows.net";
-const AlmacenamientoCompartido = process.env.CONTAINERSHARED || "dtmy2YTMii/7hx02KXGz0iqJpp993ud15yL1TdPmWE7O0HDbf7zfik9TBBartXWbNgL+5aa3yj2h+ASt/WAV/w==";
+const Almacenamiento = process.env.CONTAINER;
+const AlmacenamientoCompartido = process.env.CONTAINERSHARED;
 
 
 /*conexion a Postgresql
