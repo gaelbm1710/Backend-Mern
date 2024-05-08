@@ -60,7 +60,7 @@ async function createUser(req, res) {
         const imagePath = image.getFilePath(req.files.avatar);
         user.avatar = imagePath;
     }
-
+    /*
     const containerName = "usuarios";
     const filePath = req.files.avatar.path;
     const blobName = `usuarios${filePath}`;
@@ -74,7 +74,7 @@ async function createUser(req, res) {
     uploadFile().catch((error) => {
         console.error("Error al subir el archivo a Azure: ", error);
     })
-
+    */
     const saveUser = async (error, userStored) => {
         try {
             await user.save();
