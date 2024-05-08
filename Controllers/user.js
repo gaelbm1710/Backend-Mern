@@ -4,10 +4,10 @@ const bcrypt = require("bcryptjs");
 const image = require("../utils/image");
 const sendgrid = require('@sendgrid/mail');
 const { Almacenamiento, AlmacenamientoCompartido, Apisendgrind, Email } = require("../constants")
-const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
+//const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
 
-const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
-const storageService = new StorageSharedKeyCredential("kaapaproduction", AlmacenamientoCompartido);
+//const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
+//const storageService = new StorageSharedKeyCredential("kaapaproduction", AlmacenamientoCompartido);
 
 async function getMe(req, res) {
     const { user_id } = req.user;
