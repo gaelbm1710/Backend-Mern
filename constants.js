@@ -30,8 +30,8 @@ const PFIYNDE = "d-81d628a74e114e999ad3122b69f1a310";
 const CotizacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
 
 
-const Almacenamiento = "";
-const AlmacenamientoCompartido ="";
+const Almacenamiento = process.env.CONTAINER;
+const AlmacenamientoCompartido =process.env.CONTAINERSHARED;
 
 
 
