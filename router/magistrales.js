@@ -12,7 +12,7 @@ api.patch("/magis/:id",[md_auth.asureAuth], MagController.updateMagisInyDe);
 api.delete("/mag/:id",[md_auth.asureAuth],MagController.deleteMag);
 api.get("/mag/cardcode/:cardcode",MagController.getMagbyCardcode);
 api.get("/mag/asesor/:asesor",MagController.getMagbyAsesor);
-api.get("/mag/actividad/:actividad",MagController.getMagbyActvidad);
+api.get("/magi",MagController.getMagbyActvidad);
 api.get("/mags",MagController.getMagbyActvidadyAsesor);
 
 
@@ -24,7 +24,7 @@ api.patch("/opei/:id",[md_auth.asureAuth], MagController.updateMagiOpe);
 api.patch("/opeis/:id",[md_auth.asureAuth], MagController.updateMagisOpe);
 api.get("/ope/cardcode/:cardcode",MagController.getMagbyCardcode);
 api.get("/ope/asesor/:asesor",MagController.getMagbyAsesor);
-api.get("/ope/actividad/:actividad",MagController.getMagbyActvidad);
+api.get("/opei",MagController.getMagbyActvidad);
 api.get("/opes",MagController.getMagbyActvidadyAsesor);
 
 
@@ -36,7 +36,7 @@ api.patch("/comei/:id",[md_auth.asureAuth], MagController.updateMagiCome);
 api.patch("/comeis/:id",[md_auth.asureAuth], MagController.updateMagisCome);
 api.get("/come/cardcode/:cardcode",MagController.getMagbyCardcode);
 api.get("/come/asesor/:asesor",MagController.getMagbyAsesor);
-api.get("/come/asesor/:actividad",MagController.getMagbyActvidad);
+api.get("/comei",MagController.getMagbyActvidad);
 api.get("/comes",MagController.getMagbyActvidadyAsesor);
 
 

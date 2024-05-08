@@ -568,10 +568,10 @@ async function getMagbyAsesor(req, res) {
 
 async function getMagbyActvidad(req, res) {
     try {
-        const { page = 1, limit = 10, actividad } = req.params;
+        const { page = 1, limit = 10, actividad } = req.query;
         let query = {};
         const options = {
-            page: parseInt(page),
+            page ,
             limit: parseInt(limit),
         };
         if (actividad) {
@@ -584,8 +584,8 @@ async function getMagbyActvidad(req, res) {
                 res.status(400).send({ msg: "Error al obtener la información", error })
             } else {
                 res.status(200).send(mags);
-                console.log("Opciones: ",options);
-                console.log("Actividad: ",actividad);
+                //console.log("Opciones: ",options);
+                //console.log("Actividad: ",actividad);
             }
         });
     } catch (error) {
