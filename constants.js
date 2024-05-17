@@ -26,12 +26,25 @@ const mongoDBString="mongodb+srv://<user>:<password>@kaapadb-mongo.mongocluster.
 //Servicio de correo
 const Apisendgrind = process.env.SENDGRID_API_KEY;
 const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
-const Registro="d-8e8c1968c6ca4f90acaaace0d18116c0"; 
+const Registro="d-8e8c1968c6ca4f90acaaace0d18116c0";
+const Autorizacion = "d-6a66e908ed99452f9ffc0e32c2dd02d1";
+
+//Plantillas Para Cotización Nueva
 const CotizacionNueva = "d-ee0958ca2fbd4f74a12655aadb91732a";
-const PFIYNDE = "d-81d628a74e114e999ad3122b69f1a310";
+const InydeCotizacionNueva = "d-81d628a74e114e999ad3122b69f1a310";
+const OpeCotizacionNueva = " d-300b3f3e1c2544a1a8b1d615df789b31";
 const CotizacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
 
+//Plantillas Para Presentación Nueva
+const PresentacionNueva = "d-f430fa43ba8e439fb1e98cbdbdb7ea2f";
+const InydePresentacionNueva = "d-374491637c894bdfa7e3c9a9f7362615";
+const PresentacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
 
+//Plantillas Para Cambio de Base
+
+
+
+//Azure Contenedor
 const Almacenamiento = process.env.CONTAINER ;
 const AlmacenamientoCompartido =process.env.CONTAINERSHARED;
 
@@ -78,9 +91,15 @@ module.exports={
     Apisendgrind,
     Email,
     Registro,
+    Autorizacion,
     CotizacionNueva,
-    PFIYNDE,
+    InydeCotizacionNueva,
     CotizacionFinalizada,
+    OpeCotizacionNueva,
+    PresentacionNueva,
+    InydePresentacionNueva,
+    PresentacionFinalizada,
+    
    //Almacenamiento,
    // AlmacenamientoCompartido
 };

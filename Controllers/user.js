@@ -3,7 +3,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const image = require("../utils/image");
 const sendgrid = require('@sendgrid/mail');
-const { Almacenamiento, AlmacenamientoCompartido, Apisendgrind, Email } = require("../constants")
+const { Almacenamiento, AlmacenamientoCompartido, Apisendgrind, Email, Autorizacion } = require("../constants")
 //const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
 
 //const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
@@ -143,9 +143,7 @@ async function updateActive(req, res) {
                 name: 'Kaapa Notifica',
                 email: Email
             },
-            subject: 'Se ha activado tu cuenta',
-            text: 'Bienvenido a Kaapa. Tu cuenta ha sido activada por los Administradores',
-            html: '<strong>Bienvenido a Kaapa. Tu cuenta ha sido activada por los Administradores</strong>'
+            templateId: Autorizacion
         }
 
         const sendMail = async () => {

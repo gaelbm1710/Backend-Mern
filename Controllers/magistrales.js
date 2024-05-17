@@ -2,7 +2,7 @@ const { query } = require("express");
 const Mag = require("../models/magistrales");
 const User = require("../models/user");
 const sendgrid = require('@sendgrid/mail');
-const { Apisendgrind, Email, CotizacionNueva,PFIYNDE, CotizacionFinalizada } = require("../constants")
+const { Apisendgrind, Email, CotizacionNueva, InydeCotizacionNueva, OpeCotizacionNueva, CotizacionFinalizada } = require("../constants")
 
 async function createMag(req, res) {
     try {
@@ -16,8 +16,8 @@ async function createMag(req, res) {
         mag.created_at = new Date();
         //console.log("Esto es el primer mag:", mag);
         const magiStored = await mag.save();
-       // console.log("Esto es mag", mag);
-       // console.log("Esto es magiStored", magiStored);
+        // console.log("Esto es mag", mag);
+        // console.log("Esto es magiStored", magiStored);
         sendgrid.setApiKey(Apisendgrind);
         const NuevaCotizacion = {
             to: iyndeEmails,
@@ -28,7 +28,8 @@ async function createMag(req, res) {
             templateId: CotizacionNueva,
             dynamic_template_data: {
                 Folio: magiStored.folio,
-                asesor: magiStored.asesor
+                asesor: magiStored.asesor,
+                Actividad: magiStored.actividad 
             }
         }
         const sendMail = async () => {
@@ -74,24 +75,25 @@ async function updateMagInyDe(req, res) {
         magData.sIyD = true;
         magData.StatusGeneral = false;
         sendgrid.setApiKey(Apisendgrind);
+        console.log(magData.folio);
         const procesoInyde = {
             to: opeEmails,
             from: {
                 name: 'Cotización Nueva',
                 email: Email
             },
-            templateId: PFIYNDE,
+            templateId: InydeCotizacionNueva,
             dynamic_template_data: {
                 Folio: magData.folio
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log("Correo Enviado de Proceso F. INYDE");
                 await sendgrid.send(procesoInyde);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -111,7 +113,7 @@ async function updateMagInyDe(req, res) {
 
 async function updateMagOpe(req, res) {
     try {
-        const comes = await User.find({role: "com"});
+        const comes = await User.find({ role: "com" });
         const comeEmails = comes.map(come => come.email);
         const { id } = req.params;
         const magData = req.body;
@@ -119,23 +121,22 @@ async function updateMagOpe(req, res) {
         magData.StatusGeneral = false;
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
-        const procesoOpe={
+        const procesoOpe = {
             to: [...comeEmails, magData.asesor],
-            from:{
-                name:'Cotización Nueva',
+            from: {
+                name: 'Cotización Nueva',
                 email: Email
             },
-            templateId: PFIYNDE,
+            templateId: OpeCotizacionNueva,
             dynamic_template_data: {
                 Folio: magData.folio,
-                CardCode: magData.activos,
+                CardCode: magData.cardcode,
+                Activos: magData.activos,
                 Base: magData.base,
-                Refrigeracion: magData.refri,
+                Refigeración: magData.refri,
                 Caducidad: magData.caducidad,
-                Receta: magData.receta,
                 Exclusiva: magData.excl,
                 Clasificacion: magData.clasi,
-                Comentarios: magData.comCli,
                 precio1: magData.precio1,
                 precio2: magData.precio2,
                 precio3: magData.precio3,
@@ -146,13 +147,13 @@ async function updateMagOpe(req, res) {
                 precio8: magData.precio8
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log("Correo Enviado Proceso F Ope");
                 await sendgrid.send(procesoOpe);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -177,10 +178,11 @@ async function updateMagCome(req, res) {
         magData.sCom = true;
         magData.StatusGeneral = true;
         sendgrid.setApiKey(Apisendgrind);
-        const formulaNueva={
+        console.log(magData.asesor);
+        const formulaNueva = {
             to: magData.asesor,
             from: {
-                name:'Cotización Nueva',
+                name: 'Cotización Nueva',
                 email: Email
             },
             templateId: CotizacionFinalizada,
@@ -189,13 +191,13 @@ async function updateMagCome(req, res) {
                 Clave: magData.folio_sCom
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log('Correo de Cotizacion nueva enviado');
                 await sendgrid.send(formulaNueva);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -229,18 +231,18 @@ async function updateMagiInyDe(req, res) {
                 name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: PFIYNDE,
+            templateId: InydeCotizacionNueva,
             dynamic_template_data: {
                 Folio: magData.folio
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log("Correo Enviado de Proceso F. INYDE");
                 await sendgrid.send(procesoInyde);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -260,7 +262,7 @@ async function updateMagiInyDe(req, res) {
 
 async function updateMagiOpe(req, res) {
     try {
-        const comes = await User.find({role: "com"});
+        const comes = await User.find({ role: "com" });
         const comeEmails = comes.map(come => come.email);
         const { id } = req.params;
         const magData = req.body;
@@ -268,43 +270,27 @@ async function updateMagiOpe(req, res) {
         magData.StatusGeneral = false;
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
-        const procesoOpe={
+        const procesoOpe = {
             to: [
-            {email: comeEmails},
-            {email: magData.asesor}
+                { email: comeEmails },
+                { email: magData.asesor }
             ],
-            from:{
-                name:'Presentación Nueva',
+            from: {
+                name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: PFIYNDE,
+            templateId: OpeCotizacionNueva,
             dynamic_template_data: {
-                Folio: magData.folio,
-                CardCode: magData.activos,
-                Base: magData.base,
-                Refrigeracion: magData.refri,
-                Caducidad: magData.caducidad,
-                Receta: magData.receta,
-                Exclusiva: magData.excl,
-                Clasificacion: magData.clasi,
-                Comentarios: magData.comCli,
-                precio1: magData.precio1,
-                precio2: magData.precio2,
-                precio3: magData.precio3,
-                precio4: magData.precio4,
-                precio5: magData.precio5,
-                precio6: magData.precio6,
-                precio7: magData.precio7,
-                precio8: magData.precio8
+                Folio: magData.folio
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log("Correo Enviado Proceso F Ope");
                 await sendgrid.send(procesoOpe);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -329,10 +315,10 @@ async function updateMagiCome(req, res) {
         magData.sCom = true;
         magData.StatusGeneral = true;
         sendgrid.setApiKey(Apisendgrind);
-        const formulaNueva={
+        const formulaNueva = {
             to: magData.asesor,
             from: {
-                name:'Presentación Nueva',
+                name: 'Presentación Nueva',
                 email: Email
             },
             templateId: CotizacionFinalizada,
@@ -341,13 +327,13 @@ async function updateMagiCome(req, res) {
                 Clave: magData.folio_sCom
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log('Correo de Cotizacion nueva enviado');
                 await sendgrid.send(formulaNueva);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -381,18 +367,18 @@ async function updateMagisInyDe(req, res) {
                 name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: PFIYNDE,
+            templateId: InydeCotizacionNueva,
             dynamic_template_data: {
                 Folio: magData.folio
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log("Correo Enviado de Proceso F. INYDE");
                 await sendgrid.send(procesoInyde);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -412,7 +398,7 @@ async function updateMagisInyDe(req, res) {
 
 async function updateMagisOpe(req, res) {
     try {
-        const comes = await User.find({role: "com"});
+        const comes = await User.find({ role: "com" });
         const comeEmails = comes.map(come => come.email);
         const { id } = req.params;
         const magData = req.body;
@@ -420,13 +406,13 @@ async function updateMagisOpe(req, res) {
         magData.StatusGeneral = false;
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
-        const procesoOpe={
+        const procesoOpe = {
             to: [...comeEmails, magData.asesor],
-            from:{
-                name:'Presentación Nueva',
+            from: {
+                name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: PFIYNDE,
+            templateId: OpeCotizacionNueva,
             dynamic_template_data: {
                 Folio: magData.folio,
                 CardCode: magData.activos,
@@ -447,13 +433,13 @@ async function updateMagisOpe(req, res) {
                 precio8: magData.precio8
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log("Correo Enviado Proceso F Ope");
                 await sendgrid.send(procesoOpe);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -478,10 +464,10 @@ async function updateMagisCome(req, res) {
         magData.sCom = true;
         magData.StatusGeneral = true;
         sendgrid.setApiKey(Apisendgrind);
-        const formulaNueva={
+        const formulaNueva = {
             to: magData.asesor,
             from: {
-                name:'Presentación Nueva',
+                name: 'Presentación Nueva',
                 email: Email
             },
             templateId: CotizacionFinalizada,
@@ -489,13 +475,13 @@ async function updateMagisCome(req, res) {
 
             }
         }
-        const sendMail = async () =>{
+        const sendMail = async () => {
             try {
                 console.log('Correo de Cotizacion nueva enviado');
                 await sendgrid.send(formulaNueva);
             } catch (error) {
                 console.error(error);
-                if(error.response){
+                if (error.response) {
                     console.error(error.response.body);
                 }
             }
@@ -571,7 +557,7 @@ async function getMagbyActvidad(req, res) {
         const { page = 1, limit = 10, actividad } = req.query;
         let query = {};
         const options = {
-            page ,
+            page,
             limit: parseInt(limit),
         };
         if (actividad) {
