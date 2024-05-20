@@ -10,6 +10,7 @@ const MagSchema = mongoose.Schema({
     folio_Op: Number,
     folio_sCom: Number,
     asesor: String,
+    asesornom: String,
     cardcode: String,
     cliente: String,
     base: String,
