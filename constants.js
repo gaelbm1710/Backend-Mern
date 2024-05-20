@@ -37,11 +37,14 @@ const CotizacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
 
 //Plantillas Para Presentación Nueva
 const PresentacionNueva = "d-f430fa43ba8e439fb1e98cbdbdb7ea2f";
-const InydePresentacionNueva = "d-374491637c894bdfa7e3c9a9f7362615";
+const InydePresentacionNueva = "d-81d628a74e114e999ad3122b69f1a310";
 const PresentacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
 
 //Plantillas Para Cambio de Base
-
+const cambioNuevo = "d-3652399085a74f7bb87774ca0ad5f26b";
+const InydeCambioNuevo = "d-81d628a74e114e999ad3122b69f1a310";
+const OpeCambioNueva = " d-300b3f3e1c2544a1a8b1d615df789b31";
+const CambioFinalizado = "d-417bd2f630454d948e07722b45ca2da0";
 
 
 //Azure Contenedor
@@ -99,7 +102,10 @@ module.exports={
     PresentacionNueva,
     InydePresentacionNueva,
     PresentacionFinalizada,
-    
+    cambioNuevo,
+    CambioFinalizado,
+    InydeCambioNuevo,
+    OpeCambioNueva
    //Almacenamiento,
    // AlmacenamientoCompartido
 };

@@ -2,7 +2,7 @@ const { query } = require("express");
 const Mag = require("../models/magistrales");
 const User = require("../models/user");
 const sendgrid = require('@sendgrid/mail');
-const { Apisendgrind, Email, CotizacionNueva, InydeCotizacionNueva, OpeCotizacionNueva, CotizacionFinalizada } = require("../constants")
+const { Apisendgrind, Email, CotizacionNueva, InydeCotizacionNueva, OpeCotizacionNueva, CotizacionFinalizada, InydePresentacionNueva, PresentacionFinalizada, cambioNuevo, InydeCambioNuevo, OpeCambioNueva, CambioFinalizado, PresentacionNueva } = require("../constants")
 
 async function createMag(req, res) {
     try {
@@ -14,22 +14,32 @@ async function createMag(req, res) {
             receta: false, StatusGeneral: false
         })
         mag.created_at = new Date();
-        //console.log("Esto es el primer mag:", mag);
         const magiStored = await mag.save();
-        // console.log("Esto es mag", mag);
-        // console.log("Esto es magiStored", magiStored);
         sendgrid.setApiKey(Apisendgrind);
+        let template;
+        switch (magiStored.actividad) {
+            case 'nueva':
+                template = CotizacionNueva;
+                break;
+            case 'presentacion':
+                template = PresentacionNueva
+                break;
+            case 'cambio':
+                template = cambioNuevo
+                break;
+            default:
+                template = CotizacionNueva
+        }
         const NuevaCotizacion = {
             to: iyndeEmails,
             from: {
                 name: 'Cotización Nueva',
                 email: Email
             },
-            templateId: CotizacionNueva,
+            templateId: template,
             dynamic_template_data: {
                 Folio: magiStored.folio,
                 asesor: magiStored.asesor,
-                Actividad: magiStored.actividad 
             }
         }
         const sendMail = async () => {
@@ -231,7 +241,7 @@ async function updateMagiInyDe(req, res) {
                 name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: InydeCotizacionNueva,
+            templateId: InydePresentacionNueva,
             dynamic_template_data: {
                 Folio: magData.folio
             }
@@ -321,7 +331,7 @@ async function updateMagiCome(req, res) {
                 name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: CotizacionFinalizada,
+            templateId: PresentacionFinalizada,
             dynamic_template_data: {
                 Folio: magData.folio,
                 Clave: magData.folio_sCom
@@ -367,7 +377,7 @@ async function updateMagisInyDe(req, res) {
                 name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: InydeCotizacionNueva,
+            templateId: InydeCambioNuevo,
             dynamic_template_data: {
                 Folio: magData.folio
             }
@@ -412,7 +422,7 @@ async function updateMagisOpe(req, res) {
                 name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: OpeCotizacionNueva,
+            templateId: OpeCambioNueva,
             dynamic_template_data: {
                 Folio: magData.folio,
                 CardCode: magData.activos,
@@ -470,7 +480,7 @@ async function updateMagisCome(req, res) {
                 name: 'Presentación Nueva',
                 email: Email
             },
-            templateId: CotizacionFinalizada,
+            templateId: CambioFinalizado,
             dynamic_template_data: {
 
             }
