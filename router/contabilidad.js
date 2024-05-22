@@ -13,5 +13,10 @@ api.get("/contar",ContaController.getReporteKeylaFechas);
 api.get("/creditor",ContaController.getReporteTranscreditoFechas);
 api.get("/pagar",ContaController.getPagosFacturasFechas)
 
+//Reportes
+api.get("/econta",ContaController.ExportReporteKeyla);
+api.get("/ecredito", ContaController.ExportReporteTransaccionesCredito);
+api.get("/epagos",ContaController.ExportPagosFacturas);
+
 
 module.exports=api;
