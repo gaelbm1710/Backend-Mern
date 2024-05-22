@@ -187,24 +187,21 @@ async function ExportReporteKeyla(req, res) {
             throw new Error('No se encontraron datos');
         }
 
-        var data = [];
-        response.rows.forEach(row => {
-            data.push([
-                row["cardcode"], 
-                row["nombre"], 
-                row["createdate"], 
-                row["responsedate"], 
-                row["status"], 
-                row["transactionid"], 
-                row["totalcost"], 
-                row["correo"], 
-                row["case"]
-            ]);
-        });
+        const data = response.rows.map(row => [
+            row["cardcode"],
+            row["nombre"],
+            row["createdate"],
+            row["responsedate"],
+            row["status"],
+            row["transactionid"],
+            row["totalcost"],
+            row["correo"],
+            row["case"]
+        ]);
 
-        var wb = new xl.Workbook();
-        var ws = wb.addWorksheet('Reporte General');
-        var style = wb.createStyle({
+        const wb = new xl.Workbook();
+        const ws = wb.addWorksheet('Reporte General');
+        const style = wb.createStyle({
             font: {
                 color: '#000000',
                 size: 12
@@ -212,7 +209,7 @@ async function ExportReporteKeyla(req, res) {
             numberFormat: '$#,##0.00; ($#,##0.00); -',
         });
 
-        var header = ["CardCode", "Nombre", "CreateDate", "ResponseDate", "Status", "TransactionID", "TotalCost", "Correo", "Case"];
+        const header = ["CardCode", "Nombre", "CreateDate", "ResponseDate", "Status", "TransactionID", "TotalCost", "Correo", "Case"];
         header.forEach((headerTitle, index) => {
             ws.cell(1, index + 1).string(headerTitle).style(style);
         });
@@ -227,23 +224,11 @@ async function ExportReporteKeyla(req, res) {
             });
         });
 
-        const filepath = './ReporteKeyla.xlsx';
-        wb.write(filepath, (err, stats) => {
-            if (err) {
-                console.error("Error al escribir el archivo", err);
-                res.status(500).send({ msg: "Error al generar el archivo" });
-            } else {
-                res.download(filepath, 'ReporteKeyla.xlsx', (err) => {
-                    if (err) {
-                        console.error("Error al descargar el archivo", err);
-                        res.status(500).send({ msg: "Error al descargar el archivo" });
-                    }
-                });
-            }
-        });
+        wb.write('ReporteKeyla.xlsx', res);
+
     } catch (err) {
         console.error("Error al ejecutar el reporte", err);
-        res.status(500).send({ msg: "Error al ejecutar el reporte" });
+        res.status(500).json({ msg: "Error al ejecutar el reporte" });
     }
 }
 
@@ -257,13 +242,13 @@ async function ExportReporteTransaccionesCredito(req, res) {
         var data = [];
         response.rows.forEach(row => {
             data.push([
-                row["cardcode"], 
-                row["nombre"], 
-                row["pedido"], 
-                row["fechacreacion"], 
-                row["estado"], 
-                row["fechapago"], 
-                row["total"], 
+                row["cardcode"],
+                row["nombre"],
+                row["pedido"],
+                row["fechacreacion"],
+                row["estado"],
+                row["fechapago"],
+                row["total"],
             ]);
         });
 
@@ -338,15 +323,15 @@ async function ExportPagosFacturas(req, res) {
         var data = [];
         response.rows.forEach(row => {
             data.push([
-                row["cardcode"], 
-                row["nombre"], 
-                row["fecha_creacion"], 
-                row["fecha_pago"], 
-                row["status"], 
-                row["factura"], 
+                row["cardcode"],
+                row["nombre"],
+                row["fecha_creacion"],
+                row["fecha_pago"],
+                row["status"],
+                row["factura"],
                 row["total_factura"],
                 row["correo"],
-                row["metodo_pago"] 
+                row["metodo_pago"]
             ]);
         });
 
