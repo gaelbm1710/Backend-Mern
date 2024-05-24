@@ -59,6 +59,7 @@ async function createUser(req, res) {
         const imagePath = image.getFilePath(req.files.avatar);
         user.avatar = imagePath;
     }
+    /*
     const containerName = "usuarios";
     const filePath = req.files.avatar.path;
     const blobName = `usuarios${filePath}`;
@@ -72,6 +73,7 @@ async function createUser(req, res) {
     uploadFile().catch((error) => {
         console.error("Error al subir el archivo a Azure: ", error);
     })
+    */
     const saveUser = async (error, userStored) => {
         try {
             await user.save();
@@ -94,23 +96,23 @@ async function updateUser(req, res) {
     } else {
         delete userData.password;
     }
-
-    if (req.files && req.files.avatar) {
-        const imagePath = image.getFilePath(req.files.avatar);
-        userData.avatar = imagePath;
-        const containerName = "usuarios";
-        const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
-        const containerClient = blobService.getContainerClient(containerName);
-        const blobName = `avatar_${req.files.avatar.originalFilename}`;
-        const blobClient = containerClient.getBlockBlobClient(blobName);
-        const stream = fs.createReadStream(req.files.avatar.path);
-        try {
-            await blobClient.uploadStream(stream, undefined, undefined, { blobHTTPHeaders: { blobContentType: req.files.avatar.type } });
-        } catch (error) {
-            return res.status(500).send({ msg: "Error al subir el avatar al almacenamiento" });
+    /*
+        if (req.files && req.files.avatar) {
+            const imagePath = image.getFilePath(req.files.avatar);
+            userData.avatar = imagePath;
+            const containerName = "usuarios";
+            const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
+            const containerClient = blobService.getContainerClient(containerName);
+            const blobName = `avatar_${req.files.avatar.originalFilename}`;
+            const blobClient = containerClient.getBlockBlobClient(blobName);
+            const stream = fs.createReadStream(req.files.avatar.path);
+            try {
+                await blobClient.uploadStream(stream, undefined, undefined, { blobHTTPHeaders: { blobContentType: req.files.avatar.type } });
+            } catch (error) {
+                return res.status(500).send({ msg: "Error al subir el avatar al almacenamiento" });
+            }
         }
-    }
-
+    */
     try {
         await User.findByIdAndUpdate({ _id: id }, userData);
         res.status(200).send({ msg: "Actualización correcta" });
