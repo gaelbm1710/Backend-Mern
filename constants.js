@@ -15,18 +15,18 @@ const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
 */
 
 //Conexion a COSMOS YA funciona
-const DB_USER ="dbuser";
+const DB_USER = "dbuser";
 const DB_PASSWORD = "Paulina123";
 const DB_HOST = "kaapadb-mongo.mongocluster.cosmos.azure.com";
 const API_VERSION = "v1";
-const IP_SERVER="localhost";
+const IP_SERVER = "localhost";
 const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
-const mongoDBString="mongodb+srv://<user>:<password>@kaapadb-mongo.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+const mongoDBString = "mongodb+srv://<user>:<password>@kaapadb-mongo.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 
 //Servicio de correo
 const Apisendgrind = process.env.SENDGRID_API_KEY;
 const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
-const Registro="d-8e8c1968c6ca4f90acaaace0d18116c0";
+const Registro = "d-8e8c1968c6ca4f90acaaace0d18116c0";
 const Autorizacion = "d-6a66e908ed99452f9ffc0e32c2dd02d1";
 
 //Plantillas Para Cotización Nueva
@@ -48,8 +48,8 @@ const CambioFinalizado = "d-417bd2f630454d948e07722b45ca2da0";
 
 
 //Azure Contenedor
-const Almacenamiento = process.env.CONTAINER ;
-const AlmacenamientoCompartido =process.env.CONTAINERSHARED;
+const Almacenamiento = process.env.CONTAINER;
+const AlmacenamientoCompartido = process.env.CONTAINERSHARED;
 
 
 
@@ -68,11 +68,11 @@ const PG_USER = process.env.PG_USER;
 const PG_PASSWORD = process.env.PG_PASSWORD;
 const PG_HOST = process.env.PG_HOST;
 const PG_DATABASE = process.env.PG_DATABASE;
-const PG_PORT = process.env.PG_PORT; 
+const PG_PORT = process.env.PG_PORT;
 
 
 
-module.exports={
+module.exports = {
     DB_USER,
     DB_PASSWORD,
     DB_HOST,
@@ -85,7 +85,7 @@ module.exports={
     PG_PASSWORD,
     PG_DATABASE,
     PG_PORT,
-    pool:{
+    pool: {
         max: 5,
         min: 0,
         acquire: 30000,
@@ -105,7 +105,7 @@ module.exports={
     cambioNuevo,
     CambioFinalizado,
     InydeCambioNuevo,
-    OpeCambioNueva
-   //Almacenamiento,
-   // AlmacenamientoCompartido
+    OpeCambioNueva,
+    Almacenamiento,
+    AlmacenamientoCompartido
 };
