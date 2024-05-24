@@ -3,12 +3,11 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const image = require("../utils/image");
 const sendgrid = require('@sendgrid/mail');
-const fs = require('fs')
 const { Almacenamiento, AlmacenamientoCompartido, Apisendgrind, Email, Autorizacion } = require("../constants")
-const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
+//const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
 
-const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
-const storageService = new StorageSharedKeyCredential("kaapaproduction", AlmacenamientoCompartido);
+//const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
+//const storageService = new StorageSharedKeyCredential("kaapaproduction", AlmacenamientoCompartido);
 
 async function getMe(req, res) {
     const { user_id } = req.user;
@@ -29,6 +28,7 @@ async function getUsers(req, res) {
     } else {
         response = await User.find({ active })
     }
+    //console.log(response);
 
     res.status(200).send(response);
 }
@@ -36,11 +36,12 @@ async function getUsers(req, res) {
 async function getAdmins(req, res) {
     const { role } = req.query;
     let query = {};
-    if (active !== undefined) {
+    if (active != undefined) {
         query.role = role;
     }
     try {
         const response = await User.find(query);
+        //console.log(response);
         res.status(200).send(response);
     } catch (error) {
         console.error("Error al obtener usuarios", error);
@@ -88,34 +89,32 @@ async function createUser(req, res) {
 
 async function updateUser(req, res) {
     const { id } = req.params;
+    console.log(req.params);
     const userData = req.body;
+    console.log(userData);
+    console.log(req.body);
     if (userData.password) {
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = bcrypt.hashSync(userData.password, salt);
-        userData.password = hashPassword;
+        userData.password = hashPassword
     } else {
         delete userData.password;
     }
+    if (req.files.avatar) {
+        const imagePath = image.getFilePath(req.files.avatar)
+        userData.avatar = imagePath
+    }
     /*
-        if (req.files && req.files.avatar) {
-            const imagePath = image.getFilePath(req.files.avatar);
-            userData.avatar = imagePath;
-            const containerName = "usuarios";
-            const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
-            const containerClient = blobService.getContainerClient(containerName);
-            const blobName = `avatar_${req.files.avatar.originalFilename}`;
-            const blobClient = containerClient.getBlockBlobClient(blobName);
-            const stream = fs.createReadStream(req.files.avatar.path);
-            try {
-                await blobClient.uploadStream(stream, undefined, undefined, { blobHTTPHeaders: { blobContentType: req.files.avatar.type } });
-            } catch (error) {
-                return res.status(500).send({ msg: "Error al subir el avatar al almacenamiento" });
-            }
-        }
+    const containerName = "usuarios";
+    const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
+    const containerClient = blobService.getContainerClient(containerName);
+    const blobName = `avatar_${req.files.avatar}`;
+    const blobClient = containerClient.getBlockBlobClient(blobName);
+    await blobClient.uploadStream(req.files.avatar.path, undefined, undefined, { blobHTTPHeaders: { blobContentType: req.files.avatar } });
     */
     try {
         await User.findByIdAndUpdate({ _id: id }, userData);
-        res.status(200).send({ msg: "Actualización correcta" });
+        res.status(200).send({ msg: "Actualizacion correcta" });
     } catch (error) {
         res.status(400).send({ msg: "Error al actualizar el usuario" });
     }
