@@ -22,13 +22,16 @@ async function getMe(req, res) {
 async function getUsers(req, res) {
     const { active } = req.query;
     let response = null;
-
     if (active === undefined) {
         response = await User.find();
     } else {
         response = await User.find({ active })
     }
-    //console.log(response);
+    if (req.files && req.files.avatar) {
+        const imagePath = image.getFilePath(req.files.avatar);
+        console.log('Image Path:', imagePath);
+        user.avatar = imagePath;
+    }
 
     res.status(200).send(response);
 }
@@ -55,86 +58,65 @@ async function createUser(req, res) {
     const salt = bcrypt.genSaltSync(10);
     const hasPassword = bcrypt.hashSync(password, salt);
     user.password = hasPassword;
-
-    if (req.files.avatar) {
+    if (req.files && req.files.avatar) {
         const imagePath = image.getFilePath(req.files.avatar);
+        console.log(imagePath);
         user.avatar = imagePath;
     }
-    /*
-    const containerName = "usuarios";
-    const filePath = req.files.avatar.path;
-    const blobName = `usuarios${filePath}`;
-    async function uploadFile() {
-        const containerCliente = blobService.getContainerClient(containerName);
-        await containerCliente.createIfNotExists();
-        const blockBlobCliente = containerCliente.getBlockBlobClient(blobName);
-        await blockBlobCliente.uploadFile(filePath);
-        console.log("Archivo subido a Azure");
+    try {
+        const userStored = await user.save();
+        res.status(201).send({ msg: "Usuario Creado", userStored });
+    } catch (error) {
+        res.status(400).send({ msg: "Error al crear usuario" });
+        console.log(error);
     }
-    uploadFile().catch((error) => {
-        console.error("Error al subir el archivo a Azure: ", error);
-    })
-    */
-    const saveUser = async (error, userStored) => {
-        try {
-            await user.save();
-            res.status(201).send({ msg: "Usuario Creado", userStored });
-        } catch (error) {
-            res.status(400).send({ msg: "Error al crear usuario" });
-            console.log(error);
-        }
-    }
-    saveUser();
 }
+
+
 
 async function updateUser(req, res) {
     const { id } = req.params;
-    console.log(req.params);
     const userData = req.body;
-    console.log(userData);
-    console.log(req.body);
+
     if (userData.password) {
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = bcrypt.hashSync(userData.password, salt);
-        userData.password = hashPassword
+        userData.password = hashPassword;
     } else {
         delete userData.password;
     }
-    if (req.files.avatar) {
-        const imagePath = image.getFilePath(req.files.avatar)
-        userData.avatar = imagePath
+
+    if (req.files && req.files.avatar) {
+        const imagePath = image.getFilePath(req.files.avatar);
+        userData.avatar = imagePath;
     }
-    /*
-    const containerName = "usuarios";
-    const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
-    const containerClient = blobService.getContainerClient(containerName);
-    const blobName = `avatar_${req.files.avatar}`;
-    const blobClient = containerClient.getBlockBlobClient(blobName);
-    await blobClient.uploadStream(req.files.avatar.path, undefined, undefined, { blobHTTPHeaders: { blobContentType: req.files.avatar } });
-    */
+
     try {
-        await User.findByIdAndUpdate({ _id: id }, userData);
-        res.status(200).send({ msg: "Actualizacion correcta" });
+        await User.findByIdAndUpdate(id, userData);
+        res.status(200).send({ msg: "Actualización correcta" });
     } catch (error) {
         res.status(400).send({ msg: "Error al actualizar el usuario" });
+        console.log(error);
     }
 }
+
 
 async function updateActive(req, res) {
     const { id } = req.params;
     const userData = req.body;
+
     if (userData.password) {
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = bcrypt.hashSync(userData.password, salt);
-        userData.password = hashPassword
+        userData.password = hashPassword;
     } else {
         delete userData.password;
     }
-    if (req.files.avatar) {
-        const imagePath = image.getFilePath(req.files.avatar)
-        userData.avatar = imagePath
+
+    if (req.files && req.files.avatar) {
+        const imagePath = image.getFilePath(req.files.avatar);
+        userData.avatar = imagePath;
     }
-    console.log(userData.email);
     try {
         sendgrid.setApiKey(Apisendgrind);
         const activacion = {
@@ -144,27 +126,22 @@ async function updateActive(req, res) {
                 email: Email
             },
             templateId: Autorizacion
-        }
+        };
 
-        const sendMail = async () => {
-            try {
-                await sendgrid.send(activacion);
-                console.log('Correo de activación enviado');
-            } catch (error) {
-                console.error(error);
-                if (error.response) {
-                    console.error(error.response.body)
-                }
-            }
-        }
-        sendMail();
-        await User.findByIdAndUpdate({ _id: id }, userData);
-        console.log(userData);
-        res.status(200).send({ msg: "Actualizacion correcta" });
+        await sendgrid.send(activacion);
+        console.log('Correo de activación enviado');
+
+        await User.findByIdAndUpdate(id, userData);
+        res.status(200).send({ msg: "Actualización correcta" });
     } catch (error) {
         res.status(400).send({ msg: "Error al actualizar el usuario" });
+        console.error(error);
+        if (error.response) {
+            console.error(error.response.body);
+        }
     }
 }
+
 
 async function deleteUser(req, res) {
     const { id } = req.params;

@@ -573,8 +573,8 @@ async function getMagbyActvidad(req, res) {
         if (actividad) {
             query.actividad = actividad;
         }
-        console.log(options);
-        console.log(actividad);
+        //console.log(options);
+        //console.log(actividad);
         Mag.paginate(query, options, (error, mags) => {
             if (error) {
                 res.status(400).send({ msg: "Error al obtener la información", error })
