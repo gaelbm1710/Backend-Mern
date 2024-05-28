@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const { API_VERSION } = require("./constants");
 const cors = require("cors");
 const app = express();
+const path = require('path')
 require('dotenv').config();
 
 
@@ -23,9 +24,8 @@ app.use(bodyParser.json());
 
 
 //configurar uploads
-app.use('/uploads', express.static('uploads'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 //Cors
 app.use(cors());
