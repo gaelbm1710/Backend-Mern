@@ -89,6 +89,7 @@ async function updateUser(req, res) {
     if (req.files && req.files.avatar) {
         const imagePath = image.getFilePath(req.files.avatar);
         userData.avatar = imagePath;
+        console.log(imagePath);
     }
 
     try {

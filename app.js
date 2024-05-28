@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const {API_VERSION} = require("./constants");
+const { API_VERSION } = require("./constants");
 const cors = require("cors");
 const app = express();
 require('dotenv').config();
@@ -18,14 +18,14 @@ const contabilidad = require("./router/contabilidad");
 const soporte = require("./router/soporte");
 
 //Body-Parse
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
 //configurar uploads
-app.use(express.static("uploads"));
+app.use('/uploads', express.static('uploads'));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 //Cors
 app.use(cors());
