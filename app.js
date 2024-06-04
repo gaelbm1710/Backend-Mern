@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 
 //configurar uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+//app.use(upload.array());
 
 //Cors
 app.use(cors());

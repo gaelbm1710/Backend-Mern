@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 require('dotenv').config();
 const app = require("./app");
-const{
-    DB_USER,
-    DB_PASSWORD,
-    DB_HOST,
-    API_VERSION,
-    IP_SERVER,
+const {
+  DB_USER,
+  DB_PASSWORD,
+  DB_HOST,
+  API_VERSION,
+  IP_SERVER,
 } = require("./constants");
 
 const PORT = process.env.POST || 8080;
@@ -28,6 +28,6 @@ const connectDB = async () => {
 
 connectDB();
 
-app.get("/",(req, res) =>{
+app.get("/", (req, res) => {
   res.send("Si jala")
 });

@@ -11,6 +11,7 @@ const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
 const mongoDBString = "mongodb+srv://<user>:<password>@kaapadb-prod.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 */
 
+
 //Conexion a COSMOS YA funciona
 const DB_USER = "dbuser";
 const DB_PASSWORD = "Paulina123";
@@ -18,7 +19,7 @@ const DB_HOST = "kaapadb-mongo.mongocluster.cosmos.azure.com";
 const API_VERSION = "v1";
 const IP_SERVER = "localhost";
 const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
-const mongoDBString = "mongodb+srv://<user>:<password>@kaapadb-mongo.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+const mongoDBString = "mongodb+srv://dbuser:Paulina123@kaapadb-mongo.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000";
 
 //Servicio de correo
 const Apisendgrind = process.env.SENDGRID_API_KEY;
@@ -45,8 +46,7 @@ const CambioFinalizado = "d-417bd2f630454d948e07722b45ca2da0";
 
 
 //Azure Contenedor
-const Almacenamiento = process.env.CONTAINER;
-const AlmacenamientoCompartido = process.env.CONTAINERSHARED;
+const ConexionContenedor = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
 
 
@@ -76,6 +76,7 @@ module.exports = {
     API_VERSION,
     IP_SERVER,
     JWT_SECRET_KEY,
+    mongoDBString,
     //PG_CONEXION,
     PG_USER,
     PG_HOST,
@@ -103,6 +104,5 @@ module.exports = {
     CambioFinalizado,
     InydeCambioNuevo,
     OpeCambioNueva,
-    Almacenamiento,
-    AlmacenamientoCompartido
+    ConexionContenedor
 };

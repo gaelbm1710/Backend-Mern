@@ -3,11 +3,11 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const image = require("../utils/image");
 const sendgrid = require('@sendgrid/mail');
-const { Almacenamiento, AlmacenamientoCompartido, Apisendgrind, Email, Autorizacion } = require("../constants")
-//const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
+const { Apisendgrind, Email, Autorizacion, ConexionContenedor } = require("../constants")
+const { BlobServiceClient } = require('@azure/storage-blob')
 
-//const blobService = BlobServiceClient.fromConnectionString(Almacenamiento);
-//const storageService = new StorageSharedKeyCredential("kaapaproduction", AlmacenamientoCompartido);
+
+const blobService = BlobServiceClient.fromConnectionString(ConexionContenedor)
 
 async function getMe(req, res) {
     const { user_id } = req.user;
@@ -21,19 +21,31 @@ async function getMe(req, res) {
 
 async function getUsers(req, res) {
     const { active } = req.query;
-    let response = null;
-    if (active === undefined) {
-        response = await User.find();
-    } else {
-        response = await User.find({ active })
-    }
-    if (req.files && req.files.avatar) {
-        const imagePath = image.getFilePath(req.files.avatar);
-        console.log('Image Path:', imagePath);
-        user.avatar = imagePath;
-    }
+    let users;
 
-    res.status(200).send(response);
+    try {
+        if (active === undefined) {
+            users = await User.find();
+        } else {
+            users = await User.find({ active });
+        }
+        const containerClient = blobService.getContainerClient("usuarios");
+
+        users = await Promise.all(users.map(async user => {
+            if (user.avatar) {
+                const blobClient = containerClient.getBlobClient(user.avatar.split('/').pop());
+                const url = blobClient.url;
+                user = user.toObject();
+                user.avatarUrl = url;
+            }
+            return user;
+        }));
+
+        res.status(200).send(users);
+    } catch (error) {
+        res.status(500).send({ msg: "Error al obtener usuarios", error });
+        console.log(error);
+    }
 }
 
 async function getAdmins(req, res) {
@@ -58,26 +70,37 @@ async function createUser(req, res) {
     const salt = bcrypt.genSaltSync(10);
     const hasPassword = bcrypt.hashSync(password, salt);
     user.password = hasPassword;
-    if (req.files && req.files.avatar) {
-        const imagePath = image.getFilePath(req.files.avatar);
-        console.log(imagePath);
-        user.avatar = imagePath;
-    }
-    try {
-        const userStored = await user.save();
-        res.status(201).send({ msg: "Usuario Creado", userStored });
-    } catch (error) {
-        res.status(400).send({ msg: "Error al crear usuario" });
-        console.log(error);
+
+    if (req.file) {
+        const { originalname, buffer } = req.file;
+        const containerClient = blobService.getContainerClient("avatar");
+        try {
+            await containerClient.getBlockBlobClient(originalname).uploadData(buffer);
+            const imagePath = `avatar/${originalname}`;
+            user.avatar = imagePath;
+            console.log(user.avatar);
+            console.log(imagePath);
+            const userStored = await user.save();
+            res.status(201).send({ msg: "Usuario Creado", userStored });
+        } catch (error) {
+            res.status(400).send({ msg: "Error al crear usuario" });
+            console.error(error);
+        }
+    } else {
+        try {
+            const userStored = await user.save();
+            res.status(201).send({ msg: "Usuario Creado", userStored });
+        } catch (error) {
+            res.status(400).send({ msg: "Error al actualizar el usuario" });
+            console.error(error);
+        }
     }
 }
-
 
 
 async function updateUser(req, res) {
     const { id } = req.params;
     const userData = req.body;
-
     if (userData.password) {
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = bcrypt.hashSync(userData.password, salt);
@@ -85,19 +108,29 @@ async function updateUser(req, res) {
     } else {
         delete userData.password;
     }
-
-    if (req.files && req.files.avatar) {
-        const imagePath = image.getFilePath(req.files.avatar);
-        userData.avatar = imagePath;
-        console.log(imagePath);
-    }
-
-    try {
-        await User.findByIdAndUpdate(id, userData);
-        res.status(200).send({ msg: "Actualización correcta" });
-    } catch (error) {
-        res.status(400).send({ msg: "Error al actualizar el usuario" });
-        console.log(error);
+    if (req.file) {
+        const { originalname, buffer } = req.file;
+        const containerClient = blobService.getContainerClient("avatar");
+        try {
+            await containerClient.getBlockBlobClient(originalname).uploadData(buffer);
+            const imagePath = `avatar/${originalname}`;
+            userData.avatar = imagePath;
+            console.log(userData.avatar);
+            console.log(imagePath);
+            await User.findByIdAndUpdate(id, userData);
+            res.status(200).send({ msg: "Actualización correcta" });
+        } catch (error) {
+            res.status(400).send({ msg: "Error al actualizar el usuario" });
+            console.log(error);
+        }
+    } else {
+        try {
+            await User.findByIdAndUpdate(id, userData);
+            res.status(200).send({ msg: "Actualización correcta" });
+        } catch (error) {
+            res.status(400).send({ msg: "Error al actualizar el usuario" });
+            console.log(error);
+        }
     }
 }
 
@@ -114,10 +147,19 @@ async function updateActive(req, res) {
         delete userData.password;
     }
 
-    if (req.files && req.files.avatar) {
-        const imagePath = image.getFilePath(req.files.avatar);
-        userData.avatar = imagePath;
+    if (req.file) {
+        const { originalname, buffer } = req.file;
+        const containerClient = blobService.getContainerClient("usuarios");
+
+        try {
+            await containerClient.getBlockBlobClient(originalname).uploadData(buffer);
+            const imagePath = `usuarios/${originalname}`;
+            userData.avatar = imagePath;
+        } catch (error) {
+            return res.status(400).send({ msg: "Error al subir la imagen" });
+        }
     }
+
     try {
         sendgrid.setApiKey(Apisendgrind);
         const activacion = {
@@ -158,6 +200,53 @@ async function deleteUser(req, res) {
     }
 }
 
+async function uploadBlob(req, res) {
+    try {
+        const { container } = req.body;
+        const { originalname, buffer } = req.file
+        const containerCliente = blobService.getContainerClient(container)
+        const blobupload = await containerCliente.getBlockBlobClient(originalname).uploadData(buffer);
+        if (blobupload) {
+            res.status(200).send({ msg: "Archivo Cargado" })
+        } else {
+            res.status(400).send({ msg: "Error al subir Archivo" })
+        }
+    } catch (error) {
+        res.status(500).send({ msg: "Error en el Servidor" })
+    }
+}
+
+async function getBlob(req, res) {
+    try {
+        const { container, filename } = req.params;
+        const containerCliente = blobService.getContainerClient(container)
+        const bloblget = await containerCliente.getBlockBlobClient(filename).downloadToBuffer();
+        res.header("Content-Type", "image/jpg", "image/png")
+        if (bloblget) {
+            res.status(200).send(bloblget)
+        } else {
+            res.status(400).send({ msg: "Error al subir Archivo" })
+        }
+    } catch (error) {
+        res.status(500).send({ msg: "Error en el Servidor" })
+    }
+}
+
+async function DownloadBlob(req, res) {
+    try {
+        const { container, filename } = req.params;
+        const containerCliente = blobService.getContainerClient(container)
+        const bloblget = await containerCliente.getBlockBlobClient(filename).downloadToBuffer();
+        if (bloblget) {
+            res.status(200).send({ msg: "Archivo Cargado" })
+        } else {
+            res.status(400).send({ msg: "Error al subir Archivo" })
+        }
+    } catch (error) {
+        res.status(500).send({ msg: "Error en el Servidor" })
+    }
+}
+
 
 
 module.exports = {
@@ -167,5 +256,8 @@ module.exports = {
     updateUser,
     deleteUser,
     getAdmins,
-    updateActive
+    updateActive,
+    uploadBlob,
+    getBlob,
+    DownloadBlob
 }
