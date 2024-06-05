@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-/*
+
 //Conexion a MONGODB
 const DB_USER = "soportesistemas";
 const DB_PASSWORD = "dch77x9Kq2Di9R7n";
@@ -9,9 +9,9 @@ const API_VERSION = "v1";
 const IP_SERVER = "localhost";
 const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
 const mongoDBString = "mongodb+srv://<user>:<password>@kaapadb-prod.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
-*/
 
 
+/*
 //Conexion a COSMOS YA funciona
 const DB_USER = "dbuser";
 const DB_PASSWORD = "Paulina123";
@@ -20,7 +20,7 @@ const API_VERSION = "v1";
 const IP_SERVER = "localhost";
 const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
 const mongoDBString = "mongodb+srv://dbuser:Paulina123@kaapadb-mongo.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000";
-
+*/
 //Servicio de correo
 const Apisendgrind = process.env.SENDGRID_API_KEY;
 const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
@@ -30,7 +30,7 @@ const Autorizacion = "d-6a66e908ed99452f9ffc0e32c2dd02d1";
 //Plantillas Para Cotización Nueva
 const CotizacionNueva = "d-ee0958ca2fbd4f74a12655aadb91732a";
 const InydeCotizacionNueva = "d-81d628a74e114e999ad3122b69f1a310";
-const OpeCotizacionNueva = " d-300b3f3e1c2544a1a8b1d615df789b31";
+const OpeCotizacionNueva = "d-300b3f3e1c2544a1a8b1d615df789b31";
 const CotizacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
 
 //Plantillas Para Presentación Nueva
@@ -41,7 +41,7 @@ const PresentacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
 //Plantillas Para Cambio de Base
 const cambioNuevo = "d-3652399085a74f7bb87774ca0ad5f26b";
 const InydeCambioNuevo = "d-81d628a74e114e999ad3122b69f1a310";
-const OpeCambioNueva = " d-300b3f3e1c2544a1a8b1d615df789b31";
+const OpeCambioNueva = "d-300b3f3e1c2544a1a8b1d615df789b31";
 const CambioFinalizado = "d-417bd2f630454d948e07722b45ca2da0";
 
 

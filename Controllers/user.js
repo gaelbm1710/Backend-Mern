@@ -78,29 +78,30 @@ async function createUser(req, res) {
             await containerClient.getBlockBlobClient(originalname).uploadData(buffer);
             const imagePath = `avatar/${originalname}`;
             user.avatar = imagePath;
-            console.log(user.avatar);
-            console.log(imagePath);
-            const userStored = await user.save();
-            res.status(201).send({ msg: "Usuario Creado", userStored });
         } catch (error) {
-            res.status(400).send({ msg: "Error al crear usuario" });
-            console.error(error);
+            return res.status(400).send({ msg: "Error al subir la imagen" });
+
         }
     } else {
-        try {
-            const userStored = await user.save();
-            res.status(201).send({ msg: "Usuario Creado", userStored });
-        } catch (error) {
-            res.status(400).send({ msg: "Error al actualizar el usuario" });
-            console.error(error);
-        }
+        user.avatar = 'avatar/default.jpg';
+    }
+
+    try {
+        const userStored = await user.save();
+        res.status(201).send({ msg: "Usuario creado", userStored });
+    } catch (error) {
+        res.status(400).send({ msg: "Error al crear el usuario" });
+        console.error(error);
+
     }
 }
+
 
 
 async function updateUser(req, res) {
     const { id } = req.params;
     const userData = req.body;
+
     if (userData.password) {
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = bcrypt.hashSync(userData.password, salt);
@@ -108,6 +109,7 @@ async function updateUser(req, res) {
     } else {
         delete userData.password;
     }
+
     if (req.file) {
         const { originalname, buffer } = req.file;
         const containerClient = blobService.getContainerClient("avatar");
@@ -115,25 +117,22 @@ async function updateUser(req, res) {
             await containerClient.getBlockBlobClient(originalname).uploadData(buffer);
             const imagePath = `avatar/${originalname}`;
             userData.avatar = imagePath;
-            console.log(userData.avatar);
-            console.log(imagePath);
-            await User.findByIdAndUpdate(id, userData);
-            res.status(200).send({ msg: "Actualización correcta" });
         } catch (error) {
-            res.status(400).send({ msg: "Error al actualizar el usuario" });
-            console.log(error);
-        }
-    } else {
-        try {
-            await User.findByIdAndUpdate(id, userData);
-            res.status(200).send({ msg: "Actualización correcta" });
-        } catch (error) {
-            res.status(400).send({ msg: "Error al actualizar el usuario" });
-            console.log(error);
+            return res.status(400).send({ msg: "Error al subir la imagen" });
         }
     }
-}
+    if (Array.isArray(userData.avatar)) {
+        userData.avatar = userData.avatar[0];
+    }
 
+    try {
+        await User.findByIdAndUpdate(id, userData);
+        res.status(200).send({ msg: "Actualización correcta" });
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar el usuario" });
+        console.log(error);
+    }
+}
 
 async function updateActive(req, res) {
     const { id } = req.params;

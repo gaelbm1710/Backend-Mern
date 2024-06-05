@@ -83,7 +83,6 @@ async function updateMagInyDe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sIyD = true;
-        magData.StatusGeneral = false;
         sendgrid.setApiKey(Apisendgrind);
         console.log(magData.folio);
         const procesoInyde = {
@@ -128,8 +127,6 @@ async function updateMagOpe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sOp = true;
-        magData.StatusGeneral = false;
-        console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe = {
             to: [...comeEmails, magData.asesor],
@@ -143,10 +140,12 @@ async function updateMagOpe(req, res) {
                 CardCode: magData.cardcode,
                 Activos: magData.activos,
                 Base: magData.base,
-                Refigeración: magData.refri,
+                Refrigeracion: magData.refri ? 'Si' : 'No',
                 Caducidad: magData.caducidad,
-                Exclusiva: magData.excl,
+                Receta: magData.receta ? 'Si' : 'No',
+                Exclusiva: magData.excl ? 'Si' : 'No',
                 Clasificacion: magData.clasi,
+                Comentarios: magData.comClie,
                 precio1: magData.precio1,
                 precio2: magData.precio2,
                 precio3: magData.precio3,
