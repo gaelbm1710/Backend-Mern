@@ -8,7 +8,7 @@ const MagSchema = mongoose.Schema({
     },
     folio_IyD: Number,
     folio_Op: Number,
-    folio_sCom: Number,
+    folio_sCom: String,
     asesor: String,
     asesornom: String,
     cardcode: String,
@@ -50,7 +50,7 @@ const MagSchema = mongoose.Schema({
 
 MagSchema.plugin(mongoosePaginate);
 
-MagSchema.pre('save', async function(next) {
+MagSchema.pre('save', async function (next) {
     try {
         const lastMag = await this.constructor.findOne({}, {}, { sort: { 'folio': -1 } });
         if (lastMag) {
@@ -64,4 +64,4 @@ MagSchema.pre('save', async function(next) {
     }
 });
 
-module.exports=mongoose.model("Mag", MagSchema);
+module.exports = mongoose.model("Mag", MagSchema);
