@@ -227,15 +227,15 @@ async function updateMagCome(req, res) {
 //COTIZACION Nueva PRESENTACION
 async function updateMagiInyDe(req, res) {
     try {
-        const opes = await User.find({ role: "ope" });
-        const opeEmails = opes.map(ope => ope.email);
+        const comes = await User.find({ role: "com" });
+        const comeEmails = comes.map(come => come.email);
         const { id } = req.params;
         const magData = req.body;
         magData.sIyD = true;
         magData.StatusGeneral = false;
         sendgrid.setApiKey(Apisendgrind);
         const procesoInyde = {
-            to: opeEmails,
+            to: comeEmails,
             from: {
                 name: 'Presentación Nueva',
                 email: Email

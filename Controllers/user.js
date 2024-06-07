@@ -67,10 +67,10 @@ async function getAdmins(req, res) {
 async function createUser(req, res) {
     const { password } = req.body;
     const user = new User({ ...req.body, active: false });
+    console.log(user.password);
     const salt = bcrypt.genSaltSync(10);
     const hasPassword = bcrypt.hashSync(password, salt);
     user.password = hasPassword;
-
     if (req.file) {
         const { originalname, buffer } = req.file;
         const containerClient = blobService.getContainerClient("avatar");
@@ -89,6 +89,7 @@ async function createUser(req, res) {
     try {
         const userStored = await user.save();
         res.status(201).send({ msg: "Usuario creado", userStored });
+        console.log(userStored);
     } catch (error) {
         res.status(400).send({ msg: "Error al crear el usuario" });
         console.error(error);
@@ -103,10 +104,12 @@ async function updateUser(req, res) {
     const userData = req.body;
 
     if (userData.password) {
+        console.log(userData.password);
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = bcrypt.hashSync(userData.password, salt);
         userData.password = hashPassword;
-    } else {
+    } else if (!userData.password) {
+        console.log(userData.password);
         delete userData.password;
     }
 
