@@ -1,25 +1,26 @@
 require('dotenv').config();
 
-/*
+
 //Conexion a MONGODB
-const DB_USER = "soportesistemas";
-const DB_PASSWORD = "dch77x9Kq2Di9R7n";
-const DB_HOST = "formulasnuevas.yythhzv.mongodb.net";
-const API_VERSION = "v1";
-const IP_SERVER = "localhost";
-const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
-const mongoDBString = "mongodb+srv://<user>:<password>@kaapadb-prod.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+const DB_USER = process.env.AT_USER;
+const DB_PASSWORD = process.env.AT_PASSWORD;
+const DB_HOST = process.env.AT_HOST;
+const API_VERSION = process.env.AT_API_VERSION;
+const IP_SERVER = process.env.AT_IP_SERVER;
+const JWT_SECRET_KEY = process.env.AT_JWT_SECRET_KEY;
+const mongoDBString = process.env.AT_mongoDBString;
 
 
-*/
+/*
 //Conexion a COSMOS YA funciona
-const DB_USER = "dbuser";
-const DB_PASSWORD = "Paulina123";
-const DB_HOST = "kaapadb-mongo.mongocluster.cosmos.azure.com";
-const API_VERSION = "v1";
-const IP_SERVER = "localhost";
-const JWT_SECRET_KEY = "GgLXeLCBfLr9CY9vYU2oOpjkWUR2D1pLHAniziVhKvZYNUud6VZC"
-const mongoDBString = "mongodb+srv://dbuser:Paulina123@kaapadb-mongo.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000";
+const DB_USER = process.env.CO_DB_USER;
+const DB_PASSWORD = process.env.CO_DB_PASSWORD;
+const DB_HOST = process.env.CO_DB_HOST;
+const API_VERSION = process.env.CO_API_VERSION;
+const IP_SERVER = process.env.CO_IP_SERVER;
+const JWT_SECRET_KEY = process.env.CO_JWT_SECRET_KEY;
+const mongoDBString = process.env.CO_mongoDBString;
+*/
 
 //Servicio de correo
 const Apisendgrind = process.env.SENDGRID_API_KEY;
@@ -50,24 +51,19 @@ const ConexionContenedor = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
 
 
-/*conexion a Postgresql
-const {Pool} = require('pg');
-const PG_CONEXION = new Pool({
-    PG_USER:"carlo_banuelos@omicrondxpprod",
-    PG_PASSWORD: "QK5aV315J5",
-    PG_HOST: "omicrondxpprod.postgres.database.azure.com",
-    PG_DATABASE: "omicron_dxp",
-    PG_PORT: 5432,
-})
-*/
-//Prueba a Conexion a Postgresql
+//Conexion a Postgresql
 const PG_USER = process.env.PG_USER;
 const PG_PASSWORD = process.env.PG_PASSWORD;
 const PG_HOST = process.env.PG_HOST;
 const PG_DATABASE = process.env.PG_DATABASE;
 const PG_PORT = process.env.PG_PORT;
 
-
+//Conexion a SQL SERVER
+const SQL_USER = process.env.MSSQL_USER;
+const SQL_PASSWORD = process.env.MSSQL_PASSWORD;
+const SQL_SERVER = process.env.MSSQL_SERVER;
+const SQL_DATABASE = process.env.MSSQL_DATABASE;
+const SQL_PORT = process.env.MSSQL_PORT;
 
 module.exports = {
     DB_USER,
@@ -89,6 +85,11 @@ module.exports = {
         acquire: 30000,
         idle: 1000
     },
+    SQL_USER,
+    SQL_PASSWORD,
+    SQL_SERVER,
+    SQL_DATABASE,
+    SQL_PORT,
     Apisendgrind,
     Email,
     Registro,
