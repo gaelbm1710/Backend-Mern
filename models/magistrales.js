@@ -44,9 +44,10 @@ const MagSchema = mongoose.Schema({
     caducidad: Number,
     excl: Boolean,
     comClie: String,
-    StatusGeneral: Boolean,
+    StatusGeneral: String,
     actividad: String,
-    comeAsesor: String
+    comeAsesor: String,
+    MotivoCancel: String
 });
 
 MagSchema.plugin(mongoosePaginate);

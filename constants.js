@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 
-//Conexion a MONGODB
+//Desarrollo -------> Conexion a MONGODB
 const DB_USER = process.env.AT_USER;
 const DB_PASSWORD = process.env.AT_PASSWORD;
 const DB_HOST = process.env.AT_HOST;
@@ -11,8 +11,8 @@ const JWT_SECRET_KEY = process.env.AT_JWT_SECRET_KEY;
 const mongoDBString = process.env.AT_mongoDBString;
 
 
-/*
-//Conexion a COSMOS YA funciona
+/* 
+//PRODUCCION -------> Conexion a COSMOS YA funciona
 const DB_USER = process.env.CO_DB_USER;
 const DB_PASSWORD = process.env.CO_DB_PASSWORD;
 const DB_HOST = process.env.CO_DB_HOST;
@@ -45,6 +45,8 @@ const InydeCambioNuevo = "d-81d628a74e114e999ad3122b69f1a310";
 const OpeCambioNueva = "d-300b3f3e1c2544a1a8b1d615df789b31";
 const CambioFinalizado = "d-417bd2f630454d948e07722b45ca2da0";
 
+//Plantilla De Cancelación de Solicitud
+const CancelMag = "d-8b9a5c1259c64a8e86ddf02c93a20590";
 
 //Azure Contenedor
 const ConexionContenedor = process.env.AZURE_STORAGE_CONNECTION_STRING;
@@ -105,5 +107,6 @@ module.exports = {
     CambioFinalizado,
     InydeCambioNuevo,
     OpeCambioNueva,
-    ConexionContenedor
+    ConexionContenedor,
+    CancelMag
 };

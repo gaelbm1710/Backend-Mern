@@ -2,7 +2,7 @@ const { query } = require("express");
 const Mag = require("../models/magistrales");
 const User = require("../models/user");
 const sendgrid = require('@sendgrid/mail');
-const { Apisendgrind, Email, CotizacionNueva, InydeCotizacionNueva, OpeCotizacionNueva, CotizacionFinalizada, InydePresentacionNueva, PresentacionFinalizada, cambioNuevo, InydeCambioNuevo, OpeCambioNueva, CambioFinalizado, PresentacionNueva } = require("../constants")
+const { Apisendgrind, Email, CotizacionNueva, InydeCotizacionNueva, OpeCotizacionNueva, CotizacionFinalizada, InydePresentacionNueva, PresentacionFinalizada, cambioNuevo, CancelMag, InydeCambioNuevo, OpeCambioNueva, CambioFinalizado, PresentacionNueva } = require("../constants")
 
 async function createMag(req, res) {
     try {
@@ -11,7 +11,7 @@ async function createMag(req, res) {
         const mag = new Mag({
             ...req.body,
             sIyD: false, sOp: false, sCom: false, refri: false,
-            receta: false, StatusGeneral: false
+            receta: false, StatusGeneral: "Pendiente"
         })
         mag.created_at = new Date();
         const magiStored = await mag.save();
@@ -185,7 +185,7 @@ async function updateMagCome(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sCom = true;
-        magData.StatusGeneral = true;
+        magData.StatusGeneral = "Finalizado";
         sendgrid.setApiKey(Apisendgrind);
         console.log(magData.asesor);
         const formulaNueva = {
@@ -232,7 +232,6 @@ async function updateMagiInyDe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sIyD = true;
-        magData.StatusGeneral = false;
         sendgrid.setApiKey(Apisendgrind);
         const procesoInyde = {
             to: comeEmails,
@@ -276,7 +275,6 @@ async function updateMagiOpe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sOp = true;
-        magData.StatusGeneral = false;
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe = {
@@ -322,7 +320,7 @@ async function updateMagiCome(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sCom = true;
-        magData.StatusGeneral = true;
+        magData.StatusGeneral = "Finalizado";
         sendgrid.setApiKey(Apisendgrind);
         const formulaNueva = {
             to: magData.asesor,
@@ -368,7 +366,6 @@ async function updateMagisInyDe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sIyD = true;
-        magData.StatusGeneral = false;
         sendgrid.setApiKey(Apisendgrind);
         const procesoInyde = {
             to: opeEmails,
@@ -412,7 +409,6 @@ async function updateMagisOpe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sOp = true;
-        magData.StatusGeneral = false;
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe = {
@@ -471,7 +467,7 @@ async function updateMagisCome(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sCom = true;
-        magData.StatusGeneral = true;
+        magData.StatusGeneral = "Finalizado";
         sendgrid.setApiKey(Apisendgrind);
         const formulaNueva = {
             to: magData.asesor,
@@ -519,6 +515,52 @@ async function deleteMag(req, res) {
         }
     } catch (error) {
         res.status(500).send({ msg: "Error al eliminar el Post" })
+    }
+}
+
+async function canceleMag(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
+        magData.StatusGeneral = 'Cancelado';
+        magData.sIyD = false
+        magData.sOp = false
+        magData.sCom = false
+        sendgrid.setApiKey(Apisendgrind)
+        console.log(magData.asesor);
+        const procesoCancelacion = {
+            to: magData.asesor,
+            from: {
+                name: 'Cancelación de Cotización',
+                email: Email
+            },
+            templateId: CancelMag,
+            dynamic_template_data: {
+                folio: magData.folio,
+                motivo: magData.MotivoCancel
+            }
+        }
+        const sendMail = async () => {
+            try {
+                console.log("Correo de Cancelacion Enviado");
+                await sendgrid.send(procesoCancelacion);
+            } catch (error) {
+                console.error(error);
+                if (error.response) {
+                    console.error(error.response.body);
+                }
+            }
+        }
+        sendMail();
+        const cancelarMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true })
+        if (!cancelarMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" });
+        } else {
+            res.status(200).send({ msg: "Cancelación Exitosa" })
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" })
+        console.log(error);
     }
 }
 
@@ -635,4 +677,5 @@ module.exports = {
     updateMagisOpe,
     updateMagisInyDe,
     updateMagisCome,
+    canceleMag
 }
