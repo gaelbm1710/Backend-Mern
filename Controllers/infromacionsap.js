@@ -1,4 +1,4 @@
-const sql = require('mssql')
+const sql = require('mssql');
 const { SQL_DATABASE, SQL_PASSWORD, SQL_PORT, SQL_SERVER, SQL_USER } = require("../constants");
 
 const sqlConfig = {
@@ -15,23 +15,24 @@ const sqlConfig = {
         encrypt: true,
         trustServerCertificate: true
     }
-}
+};
 
-const appPool = new sql.ConnectionPool(sqlConfig)
+const appPool = new sql.ConnectionPool(sqlConfig);
 
 async function connectMSSQL(req, res) {
     try {
-        const query = 'SELECT * FROM OITB'
-        const consulta = await appPool.query(query);
-        res.json(consulta.rows)
-        console.log("Conexion a SAP");
+        await appPool.connect();
+        const query = 'SELECT * FROM OITB';
+        const consulta = await appPool.request().query(query);
+        res.json(consulta.recordset);
     } catch (error) {
         console.log("Error ", error);
-        res.status(400).send({ msg: "Error al obtener la información", error })
+        res.status(400).send({ msg: "Error al obtener la información", error });
+        await appPool.close();
+        console.log("Conexion Cerrada");
     }
 }
 
-
 module.exports = {
     connectMSSQL,
-}
+};
