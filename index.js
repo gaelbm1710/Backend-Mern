@@ -13,7 +13,10 @@ const PORT = process.env.POST || 8080;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/`)
+    await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
 
     console.log('La conexión con la base de datos MONGODB ha sido exitosa.');
     app.listen(PORT, () => {

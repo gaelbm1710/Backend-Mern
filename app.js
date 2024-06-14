@@ -29,7 +29,16 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //app.use(upload.array());
 
 //Cors
-app.use(cors());
+const corsOptions = {
+    origin: 'https://kaapaomicron.net',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+    credentials: true,
+}
+app.use(cors(corsOptions));
+
+//app.use(cors());
+
 
 //Configurar rutas
 app.use(`/api/${API_VERSION}`, authRoutes);
