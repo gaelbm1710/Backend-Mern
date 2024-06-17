@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-/*
+
 //Desarrollo -------> Conexion a MONGODB
 const DB_USER = process.env.AT_USER;
 const DB_PASSWORD = process.env.AT_PASSWORD;
@@ -10,7 +10,7 @@ const IP_SERVER = process.env.AT_IP_SERVER;
 const JWT_SECRET_KEY = process.env.AT_JWT_SECRET_KEY;
 const mongoDBString = process.env.AT_mongoDBString
 //*/
-
+/*
 //PRODUCCION -------> Conexion a COSMOS YA funciona
 const DB_USER = process.env.CO_DB_USER;
 const DB_PASSWORD = process.env.CO_DB_PASSWORD;

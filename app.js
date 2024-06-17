@@ -17,6 +17,7 @@ const newsletterRoute = require("./router/newsletter");
 const magistrales = require("./router/magistrales");
 const contabilidad = require("./router/contabilidad");
 const soporte = require("./router/soporte");
+const marketing = require("./router/marketing")
 
 //Body-Parse
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,6 +52,7 @@ app.use(`/api/${API_VERSION}`, newsletterRoute);
 app.use(`/api/${API_VERSION}`, magistrales);
 app.use(`/api/${API_VERSION}`, contabilidad);
 app.use(`/api/${API_VERSION}`, soporte);
+app.use(`/api/${API_VERSION}`, marketing)
 
 module.exports = app;
 
