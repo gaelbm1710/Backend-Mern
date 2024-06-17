@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 require('dotenv').config();
 const app = require("./app");
-const cors = require('cors');
 const {
   DB_USER,
   DB_PASSWORD,
@@ -16,7 +15,8 @@ const connectDB = async () => {
   try {
     await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/`, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 60000,
     })
 
     console.log('La conexión con la base de datos MONGODB ha sido exitosa.');
@@ -29,12 +29,6 @@ const connectDB = async () => {
   }
 }
 
-app.use(cors({
-  origin: 'https://kaapaomicron.net',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
-  credentials: true,
-}));
 
 connectDB();
 

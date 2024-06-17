@@ -658,11 +658,29 @@ async function getMagbyActvidadyAsesor(req, res) {
     }
 }
 
+async function updateMag(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
+        //console.log(magData.asesor);
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
 
 
 module.exports = {
     createMag,
     getMag,
+    updateMag,
     updateMagInyDe,
     updateMagOpe,
     updateMagCome,

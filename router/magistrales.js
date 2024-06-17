@@ -42,4 +42,7 @@ api.get("/comes", MagController.getMagbyActvidadyAsesor);
 //Cancelación
 api.patch("/mag/cancelacion/:id", [md_auth.asureAuth], MagController.canceleMag);
 
+//Actualizar Mag
+api.patch("/mag/actualizar/:id", [md_auth.asureAuth], MagController.updateMag);
+
 module.exports = api;
