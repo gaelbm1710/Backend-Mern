@@ -29,7 +29,7 @@ async function getUsers(req, res) {
         } else {
             users = await User.find({ active });
         }
-        const containerClient = blobService.getContainerClient("usuarios");
+        const containerClient = blobService.getContainerClient("avatar");
 
         users = await Promise.all(users.map(async user => {
             if (user.avatar) {

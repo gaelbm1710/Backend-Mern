@@ -50,6 +50,9 @@ const CancelMag = "d-8b9a5c1259c64a8e86ddf02c93a20590";
 //Azure Contenedor
 const ConexionContenedor = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
+//Plantilla DE Ticket De Soporte
+
+
 
 
 //Conexion a Postgresql

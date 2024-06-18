@@ -1,5 +1,10 @@
+const { ConexionContenedor, Apisendgrind, Email,  } = require("../constants");
 const Soporte = require("../models/soporte");
 const documento = require("../utils/documents")
+const {BlobServiceClient} = require('@azure/storage-blob');
+const sendgrid = require('@sendgrid/mail')
+
+const blobService = BlobServiceClient.fromConnectionString(ConexionContenedor);
 
 async function createSoporte(req, res){
     try {
@@ -11,6 +16,29 @@ async function createSoporte(req, res){
         res.status(200).send({ msg: "Ticket creado",soporteStored});
     } catch (error) {
         res.status(400).send({ msg: "Error al crear el ticket"});
+    }
+}
+//Azure Contenedor
+async function createSoporteconAzure(req,res){
+    const soporte = new Soporte(req.body);
+    if(req.file){
+        const {originalname, buffer} = req.file;
+        const containerClient = blobService.getContainerClient("ticketsoporte");
+        try {
+            await containerClient.getBlockBlobClient(originalname).uploadData(buffer);
+            const documentosPath = `soporte/${originalname}`;
+            soporte.documentos = documentosPath;
+        } catch (error) {
+            return res.status(400).send({msg: "Error al subir el archivo"});
+        }
+    }
+    try {
+        const soporteStored = await soporte.save();
+        res.status(201).send({msg: "Ticket Creado: ", soporteStored});
+        console.log(soporteStored);   
+    } catch (error) {
+        res.status(400).send({msg:"Error al crear el ticket"});
+        console.error(error)
     }
 }
 
@@ -27,6 +55,31 @@ async function getSoporte(req, res){
             res.status(200).send(soportes);
         }
     })
+}
+
+//Get soporte Azure
+async function getSoprteconAzure(req,res){
+    const { active } = req.query;
+    let soportes;
+
+    try {
+        soportes = await Soporte.find();
+        const containerClient = blobService.getContainerClient("ticketsoporte");
+        users = await Promise.all(soportes.map(async soporte => {
+            if (soporte.documentos) {
+                const blobClient = containerClient.getBlobClient(soporte.documentos.split('/').pop());
+                const url = blobClient.url;
+                soporte = soporte.toObject();
+                soporte.documentosUrl = url;
+            }
+            return soporte;
+        }));
+
+        res.status(200).send(soportes);
+    } catch (error) {
+        res.status(500).send({ msg: "Error al obtener Tickets Soporte", error });
+        console.log(error);
+    }
 }
 
 async function updateSoporte(req, res){
@@ -66,5 +119,7 @@ module.exports={
     createSoporte,
     getSoporte,
     updateSoporte,
-    deleteTicket
+    deleteTicket,
+    createSoporteconAzure,
+    getSoprteconAzure
 }
