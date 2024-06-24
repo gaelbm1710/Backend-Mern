@@ -11,6 +11,7 @@ const JWT_SECRET_KEY = process.env.AT_JWT_SECRET_KEY;
 const mongoDBString = process.env.AT_mongoDBString
 //*/
 
+
 //PRODUCCION -------> Conexion a COSMOS YA funciona
 const DB_USER = process.env.CO_DB_USER;
 const DB_PASSWORD = process.env.CO_DB_PASSWORD;
@@ -19,11 +20,11 @@ const API_VERSION = process.env.CO_API_VERSION;
 const IP_SERVER = process.env.CO_IP_SERVER;
 const JWT_SECRET_KEY = process.env.CO_JWT_SECRET_KEY;
 const mongoDBString = process.env.CO_mongoDBString;
-
+//*/
 
 //Servicio de correo
 const Apisendgrind = process.env.SENDGRID_API_KEY;
-const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
+const Email = "kaapanotifica@o-lab.mx"
 const Registro = "d-6238b0f277774b30bcda46c2d6eefd37";
 const Autorizacion = "d-605e40356a244f21974ecb3f02481e82";
 
