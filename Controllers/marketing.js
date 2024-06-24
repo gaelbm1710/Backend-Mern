@@ -47,7 +47,7 @@ async function connectMSSQL(req, res) {
 async function ConsultaFacturas(req,res){
     try {
         await appPool.connect();
-        const query = `SELECT CardCode, DocNum, CAST(DocDate AS DATE) AS 'Fecha Factura', U_Pedido_DXP 
+        const query = `SELECT CardCode, DocNum, CAST(DocDate AS DATE) AS 'Fecha_Factura', U_Pedido_DXP 
         FROM OINV ORDER BY DocNum DESC`
         const consulta = await appPool.request().query(query);
         res.json(consulta.recordset);
@@ -72,7 +72,11 @@ async function ReportePromociones(req,res){
 
 async function CategoriaPromociones(req,res){
     try {
-        const query = `select p1.id, p1.code, p2."type",p3."type",
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 10;
+        const offset = (page - 1) * limit;
+        const values = [limit, offset];
+        const query = `select p1.id, p1.code, p2."type" as "tipo_promocion",p3."type" as "tipo_descuento",
 case
 	when p3."type" = 'Porcentaje' then CONCAT(p1.discount, '%')
 	when p3."type" = 'Monto' then CONCAT('$',p1.discount)
@@ -83,9 +87,9 @@ case
 end "Estado",
 to_char(p1.startdate,'YYYY-MM-DD') "Fecha_Inicio", to_char(p1.enddate, 'YYYY-MM-DD') "Fecha_Fin"
 from promotionalcodes p1 join promotionalcodetypes p2 on p1.promotionalcodetypesid = p2.id
-join promotionalcodediscounttypes p3 on p1.promotionalcodediscounttypesid = p3.id
-order by id`
-        const response = await pool.query(query);
+join promotionalcodediscounttypes p3 on p1.promotionalcodediscounttypesid = p3.id order by p1.id
+LIMIT $1 OFFSET $2`
+        const response = await pool.query(query, values);
         res.json(response.rows)
     } catch (error) {
         res.status(400).send({msg:"Error al obtener la información ", error})

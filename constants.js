@@ -24,28 +24,28 @@ const mongoDBString = process.env.CO_mongoDBString;
 //Servicio de correo
 const Apisendgrind = process.env.SENDGRID_API_KEY;
 const Email = "soporte.sistemas@o-lab.mx" /// Cambiar a correo de notificaciones
-const Registro = "d-8e8c1968c6ca4f90acaaace0d18116c0";
-const Autorizacion = "d-6a66e908ed99452f9ffc0e32c2dd02d1";
+const Registro = "d-6238b0f277774b30bcda46c2d6eefd37";
+const Autorizacion = "d-605e40356a244f21974ecb3f02481e82";
 
 //Plantillas Para Cotización Nueva
-const CotizacionNueva = "d-ee0958ca2fbd4f74a12655aadb91732a";
-const InydeCotizacionNueva = "d-81d628a74e114e999ad3122b69f1a310";
-const OpeCotizacionNueva = "d-300b3f3e1c2544a1a8b1d615df789b31";
-const CotizacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
+const CotizacionNueva = "d-eccc1d3037c04815bb9799dcf00c41a2";
+const InydeCotizacionNueva = "d-b5a431a8e25e4938bff65198de562d38";
+const OpeCotizacionNueva = "d-be8fd2e3e28743ad9d3da7c742f57430";
+const CotizacionFinalizada = "d-4532d593e2c64ad48c78a704ba8600fc";
 
 //Plantillas Para Presentación Nueva
-const PresentacionNueva = "d-f430fa43ba8e439fb1e98cbdbdb7ea2f";
-const InydePresentacionNueva = "d-81d628a74e114e999ad3122b69f1a310";
-const PresentacionFinalizada = "d-417bd2f630454d948e07722b45ca2da0";
+const PresentacionNueva = "d-1782a0674ab1477e9108eed310936fe4";
+const InydePresentacionNueva = "d-b5a431a8e25e4938bff65198de562d38";
+const PresentacionFinalizada = "d-4532d593e2c64ad48c78a704ba8600fc";
 
 //Plantillas Para Cambio de Base
-const cambioNuevo = "d-3652399085a74f7bb87774ca0ad5f26b";
-const InydeCambioNuevo = "d-81d628a74e114e999ad3122b69f1a310";
-const OpeCambioNueva = "d-300b3f3e1c2544a1a8b1d615df789b31";
-const CambioFinalizado = "d-417bd2f630454d948e07722b45ca2da0";
+const cambioNuevo = "d-bc93e0a1373d4e6d925198dd10a524ca";
+const InydeCambioNuevo = "d-b5a431a8e25e4938bff65198de562d38";
+const OpeCambioNueva = "d-be8fd2e3e28743ad9d3da7c742f57430";
+const CambioFinalizado = "d-4532d593e2c64ad48c78a704ba8600fc";
 
 //Plantilla De Cancelación de Solicitud
-const CancelMag = "d-8b9a5c1259c64a8e86ddf02c93a20590";
+const CancelMag = "d-1d729503228a47629825b547b9164bc9";
 
 //Azure Contenedor
 const ConexionContenedor = process.env.AZURE_STORAGE_CONNECTION_STRING;
