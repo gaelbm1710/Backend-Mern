@@ -18,12 +18,12 @@ const SoporteSchema = mongoose.Schema({
 
 SoporteSchema.plugin(mongoosePaginate);
 
-SoporteSchema.pre('save',async function (next){
+SoporteSchema.pre('save', async function (next) {
     try {
-        const lastticket = await this.constructor.findOne({},{},{sort: {'folio':-1}});
-        if(lastticket){
+        const lastticket = await this.constructor.findOne({}, {}, { sort: { 'folio': -1 } });
+        if (lastticket) {
             this.folio = lastticket.folio + 1;
-        }else{
+        } else {
             this.folio = 1;
         }
         next();
@@ -32,4 +32,4 @@ SoporteSchema.pre('save',async function (next){
     }
 })
 
-module.exports=mongoose.model("Soporte",SoporteSchema);
+module.exports = mongoose.model("Soporte", SoporteSchema);

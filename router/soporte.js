@@ -2,20 +2,20 @@ const express = require("express");
 const SoporteController = require("../Controllers/soporte");
 const multiparty = require("connect-multiparty");
 const md_auth = require("../middlewares/authenticated");
-const md_upload = multiparty({ uploadDir: "./uploads/soporte" })
+//const md_upload = multiparty({ uploadDir: "./uploads/soporte" })
 const multer = require('multer');
 
 const api = express.Router();
 const storage = multer.memoryStorage();
-const upload = multer({storage});
+const upload = multer({ storage });
 
-api.post("/soporte",[md_auth.asureAuth, md_upload], SoporteController.createSoporte);
-api.get("/soporte",SoporteController.getSoporte)
-api.patch("/soporte/:id",[md_auth.asureAuth, md_upload], SoporteController.updateSoporte);
-api.delete("/soporte/:id",[md_auth.asureAuth],SoporteController.deleteTicket);
+api.post("/soporte", [md_auth.asureAuth], SoporteController.createSoporte);
+api.get("/soporte", SoporteController.getSoporte)
+api.patch("/soporte/:id", [md_auth.asureAuth], SoporteController.updateSoporte);
+api.delete("/soporte/:id", [md_auth.asureAuth], SoporteController.deleteTicket);
 
 //Ticket con Azure
-api.post("/asoporte",[md_auth.asureAuth, upload.single("documentos")], SoporteController.createSoporteconAzure);
-api.get("/asoporte",SoporteController.getSoprteconAzure);
+api.post("/asoporte", [md_auth.asureAuth, upload.single("documentos")], SoporteController.createSoporteconAzure);
+api.get("/asoporte", SoporteController.getSoprteconAzure);
 
-module.exports=api;
+module.exports = api;

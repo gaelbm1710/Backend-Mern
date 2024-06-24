@@ -1,64 +1,66 @@
-const { ConexionContenedor, Apisendgrind, Email,  } = require("../constants");
+const { ConexionContenedor, Apisendgrind, Email, } = require("../constants");
 const Soporte = require("../models/soporte");
 const documento = require("../utils/documents")
-const {BlobServiceClient} = require('@azure/storage-blob');
+const { BlobServiceClient } = require('@azure/storage-blob');
 const sendgrid = require('@sendgrid/mail')
 
 const blobService = BlobServiceClient.fromConnectionString(ConexionContenedor);
 
-async function createSoporte(req, res){
+async function createSoporte(req, res) {
     try {
         const soporte = new Soporte(req.body);
         const documentosPath = documento.getFilePath(req.files.documentos);
         soporte.documentos = documentosPath;
         soporte.created_at = new Date();
         const soporteStored = await soporte.save();
-        res.status(200).send({ msg: "Ticket creado",soporteStored});
+        res.status(200).send({ msg: "Ticket creado", soporteStored });
     } catch (error) {
-        res.status(400).send({ msg: "Error al crear el ticket"});
+        res.status(400).send({ msg: "Error al crear el ticket" });
     }
 }
 //Azure Contenedor
-async function createSoporteconAzure(req,res){
-    const soporte = new Soporte(req.body);
-    if(req.file){
-        const {originalname, buffer} = req.file;
+async function createSoporteconAzure(req, res) {
+    const soporte = new Soporte({ ...req.body, asignado: 'Sin Asignar', estado: 'Pendiente' });
+    if (req.file) {
+        const { originalname, buffer } = req.file;
         const containerClient = blobService.getContainerClient("ticketsoporte");
         try {
             await containerClient.getBlockBlobClient(originalname).uploadData(buffer);
             const documentosPath = `soporte/${originalname}`;
             soporte.documentos = documentosPath;
         } catch (error) {
-            return res.status(400).send({msg: "Error al subir el archivo"});
+            return res.status(400).send({ msg: "Error al subir el archivo" });
         }
+    } else {
+        soporte.documentos = '';
     }
     try {
         const soporteStored = await soporte.save();
-        res.status(201).send({msg: "Ticket Creado: ", soporteStored});
-        console.log(soporteStored);   
+        res.status(201).send({ msg: "Ticket Creado: ", soporteStored });
+        console.log(soporteStored);
     } catch (error) {
-        res.status(400).send({msg:"Error al crear el ticket"});
+        res.status(400).send({ msg: "Error al crear el ticket" });
         console.error(error)
     }
 }
 
-async function getSoporte(req, res){
-    const {page = 1, limit = 10 } = req.query;
+async function getSoporte(req, res) {
+    const { page = 1, limit = 10 } = req.query;
     const options = {
         page,
         limit: parseInt(limit),
     };
-    Soporte.paginate({}, options, (error, soportes)=>{
-        if(error){
-            res.status(400).send({msg:"Error al obtener la información ", error});
-        }else{
+    Soporte.paginate({}, options, (error, soportes) => {
+        if (error) {
+            res.status(400).send({ msg: "Error al obtener la información ", error });
+        } else {
             res.status(200).send(soportes);
         }
     })
 }
 
 //Get soporte Azure
-async function getSoprteconAzure(req,res){
+async function getSoprteconAzure(req, res) {
     const { active } = req.query;
     let soportes;
 
@@ -82,40 +84,40 @@ async function getSoprteconAzure(req,res){
     }
 }
 
-async function updateSoporte(req, res){
+async function updateSoporte(req, res) {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const soporteData = req.body;
-        if(req.files.documentos){
+        if (req.files.documentos) {
             const documentosPath = documento.getFilePath(req.files.documentos);
             soporteData.documentos = documentosPath;
         }
-        const updateSoporte = await Soporte.findByIdAndUpdate({_id:id}, soporteData, {new: true});
-        if(!updateSoporte){
-            res.status(404).send({msg: "Ticket no encontrado"});
-        }else{
-            res.status(200).send({msg: "Actualización existosa", updateSoporte});
+        const updateSoporte = await Soporte.findByIdAndUpdate({ _id: id }, soporteData, { new: true });
+        if (!updateSoporte) {
+            res.status(404).send({ msg: "Ticket no encontrado" });
+        } else {
+            res.status(200).send({ msg: "Actualización existosa", updateSoporte });
         }
     } catch (error) {
-        res.status(400).send({msg: "Error al actualizar", error});
+        res.status(400).send({ msg: "Error al actualizar", error });
     }
 }
 
-async function deleteTicket(req,res){
-    const {id} = req.params;
+async function deleteTicket(req, res) {
+    const { id } = req.params;
     try {
         const deleteTicket = await Soporte.findByIdAndDelete(id);
-        if(deleteTicket){
-            res.status(200).send({msg:"Ticket eliminado"});
-        }else{
-            res.status(400).send({msg: "Ticket no encontrado"});
+        if (deleteTicket) {
+            res.status(200).send({ msg: "Ticket eliminado" });
+        } else {
+            res.status(400).send({ msg: "Ticket no encontrado" });
         }
     } catch (error) {
-        res.status(500).send({msg:"Error al eliminar el ticket"})
+        res.status(500).send({ msg: "Error al eliminar el ticket" })
     }
 }
 
-module.exports={
+module.exports = {
     createSoporte,
     getSoporte,
     updateSoporte,
