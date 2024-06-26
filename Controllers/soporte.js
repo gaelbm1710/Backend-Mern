@@ -61,7 +61,6 @@ async function getSoporte(req, res) {
 
 //Get soporte Azure
 async function getSoprteconAzure(req, res) {
-    const { active } = req.query;
     let soportes;
 
     try {
@@ -81,6 +80,31 @@ async function getSoprteconAzure(req, res) {
     } catch (error) {
         res.status(500).send({ msg: "Error al obtener Tickets Soporte", error });
         console.log(error);
+    }
+}
+
+//Solo consulte los ticket del usuario
+async function getUsuarioSoporte(req, res) {
+    try {
+        const { page = 1, limit = 10, dueno } = req.query;
+        let query = {};
+        const options = {
+            page,
+            limit: parseInt(limit)
+        };
+        if (dueno) {
+            query.dueno = dueno;
+        }
+        Soporte.paginate(query, options, (error, soportes) => {
+            if (error) {
+                res.status(400).send({ msg: "Error al obtener la información", error })
+            } else {
+                res.status(200).send(soportes)
+            }
+        });
+    } catch (error) {
+        console.error("Error: ", error);
+        res.status(500).send({ msg: "Error en el servidor" })
     }
 }
 
@@ -117,11 +141,14 @@ async function deleteTicket(req, res) {
     }
 }
 
+
+
 module.exports = {
     createSoporte,
     getSoporte,
     updateSoporte,
     deleteTicket,
     createSoporteconAzure,
-    getSoprteconAzure
+    getSoprteconAzure,
+    getUsuarioSoporte
 }

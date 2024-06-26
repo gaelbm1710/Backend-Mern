@@ -44,7 +44,7 @@ async function connectMSSQL(req, res) {
     }
 }
 //Consultas Generales
-async function ConsultaFacturas(req,res){
+async function ConsultaFacturas(req, res) {
     try {
         await appPool.connect();
         const query = `SELECT CardCode, DocNum, CAST(DocDate AS DATE) AS 'Fecha_Factura', U_Pedido_DXP 
@@ -53,24 +53,24 @@ async function ConsultaFacturas(req,res){
         res.json(consulta.recordset);
     } catch (error) {
         console.log("Error: ", error);
-        res.status(400).send({msg:"Error al obtener la información ", error})
-    }finally{
+        res.status(400).send({ msg: "Error al obtener la información ", error })
+    } finally {
         await appPool.close();
         console.log("Conexion finalizada");
     }
 }
 
-async function ReportePromociones(req,res){
+async function ReportePromociones(req, res) {
     try {
-        const response = await pool.query("SELECT * FROM vw_reportepromociones");   
+        const response = await pool.query("SELECT * FROM vw_reportepromociones");
         res.json(response.rows);
     } catch (error) {
         console.log(error);
-        res.status(400).send({msg: "Error al obtener la información ", error})
+        res.status(400).send({ msg: "Error al obtener la información ", error })
     }
 }
 
-async function CategoriaPromociones(req,res){
+async function CategoriaPromociones(req, res) {
     try {
         const page = req.query.page || 1;
         const limit = req.query.limit || 10;
@@ -92,24 +92,24 @@ LIMIT $1 OFFSET $2`
         const response = await pool.query(query, values);
         res.json(response.rows)
     } catch (error) {
-        res.status(400).send({msg:"Error al obtener la información ", error})
+        res.status(400).send({ msg: "Error al obtener la información ", error })
     }
 }
 
 //Exportar Reporte a Excel
-async function ExportarConsultaFacturas(req,res){
+async function ExportarConsultaFacturas(req, res) {
     try {
         await appPool.connect();
-        const query = `SELECT CardCode, DocNum, CAST(DocDate AS DATE) AS 'Fecha Factura', U_Pedido_DXP 
-        FROM OINV ORDER BY DocNum DESC`
+        const query = `SELECT CardCode, DocNum, CAST(DocDate AS DATE) AS 'Fecha_Factura', U_Pedido_DXP 
+        FROM OINV ORDER BY DocNum DESC`;
         const consulta = await appPool.request().query(query);
-        if(!consulta.recordset || consulta.recordset.length === 0){
-            throw new Error("No se encotraron datos");
+        if (!consulta.recordset || consulta.recordset.length === 0) {
+            throw new Error("No se encontraron datos");
         }
         const data = consulta.recordset.map(row => [
             row["CardCode"],
             row["DocNum"],
-            row["Fecha Factura"],
+            row["Fecha_Factura"] ? new Date(row["Fecha_Factura"]).toLocaleDateString('es-ES') : '',
             row["U_Pedido_DXP"]
         ]);
         const wb = new xl.Workbook();
@@ -121,8 +121,8 @@ async function ExportarConsultaFacturas(req,res){
             },
             numberFormat: '$#,##0.00; ($#,##0.00); -',
         });
-        const header = ["CardCode", "DocNum", "Fecha Factura", "U_Pedido_DXP"];
-        header.forEach((headerTitle, index) =>{
+        const header = ["CardCode", "DocNum", "Fecha_Factura", "U_Pedido_DXP"];
+        header.forEach((headerTitle, index) => {
             ws.cell(1, index + 1).string(headerTitle).style(style);
         });
         data.forEach((row, rowIndex) => {
@@ -138,11 +138,12 @@ async function ExportarConsultaFacturas(req,res){
         wb.write('Facturas.xlsx', res);
     } catch (err) {
         console.error("Error al ejecutar el reporte", err);
-        res.status(500).send({msg: "Error al ejecutar el reporte"});
+        res.status(500).send({ msg: "Error al ejecutar el reporte" });
     }
 }
 
-async function ExportarReportePromociones(req,res){
+
+async function ExportarReportePromociones(req, res) {
     try {
         const response = await pool.query("SELECT * FROM vw_reportepromociones");
         if (!response.rows || response.rows.length === 0) {

@@ -13,6 +13,6 @@ api.get("/categoriapromociones", SAPController.CategoriaPromociones);
 
 //Exportar
 api.get("/econsultafacturas", SAPController.ExportarConsultaFacturas);
-api.get("/ereportepromociones",SAPController.ExportarReportePromociones);
+api.get("/ereportepromociones", SAPController.ExportarReportePromociones);
 
 module.exports = api;
