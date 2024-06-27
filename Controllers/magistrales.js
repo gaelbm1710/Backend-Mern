@@ -234,14 +234,25 @@ async function updateMagiInyDe(req, res) {
         magData.sIyD = true;
         sendgrid.setApiKey(Apisendgrind);
         const procesoInyde = {
-            to: comeEmails,
+            to: [...comeEmails, magData.asesor],
             from: {
                 name: 'Presentación Nueva',
                 email: Email
             },
             templateId: InydePresentacionNueva,
             dynamic_template_data: {
-                Folio: magData.folio
+                Folio: magData.folio,
+                CardCode: magData.cardcode,
+                Comentarios: magData.comClie,
+                Clave_EX: magData.clave_ex,
+                precio1: magData.precio1,
+                precio2: magData.precio2,
+                precio3: magData.precio3,
+                precio4: magData.precio4,
+                precio5: magData.precio5,
+                precio6: magData.precio6,
+                precio7: magData.precio7,
+                precio8: magData.precio8
             }
         }
         const sendMail = async () => {
@@ -610,6 +621,7 @@ async function getMagbyActvidad(req, res) {
         const options = {
             page,
             limit: parseInt(limit),
+            sort: { created_at: -1 }
         };
         if (actividad) {
             query.actividad = actividad;
@@ -638,6 +650,7 @@ async function getMagbyActvidadyAsesor(req, res) {
         const options = {
             page,
             limit: parseInt(limit),
+            sort: { fecha: -1 }
         };
         if (actividad) {
             query.actividad = actividad;
@@ -647,16 +660,17 @@ async function getMagbyActvidadyAsesor(req, res) {
         }
         Mag.paginate(query, options, (error, mags) => {
             if (error) {
-                res.status(400).send({ msg: "Error al obtener la información", error })
+                res.status(400).send({ msg: "Error al obtener la información", error });
             } else {
                 res.status(200).send(mags);
             }
         });
     } catch (error) {
         console.log("Error: ", error);
-        res.status(500).send({ msg: "Error en el servidor" })
+        res.status(500).send({ msg: "Error en el servidor" });
     }
 }
+
 
 async function updateMag(req, res) {
     try {
