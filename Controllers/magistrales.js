@@ -83,6 +83,7 @@ async function updateMagInyDe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sIyD = true;
+        magData.finishDateiyde = new Date();
         sendgrid.setApiKey(Apisendgrind);
         console.log(magData.folio);
         const procesoInyde = {
@@ -127,6 +128,7 @@ async function updateMagOpe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sOp = true;
+        magData.finishDateope = new Date();
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe = {
             to: [...comeEmails, magData.asesor],
@@ -186,6 +188,7 @@ async function updateMagCome(req, res) {
         const magData = req.body;
         magData.sCom = true;
         magData.StatusGeneral = "Finalizado";
+        magData.finishDategc = new Date();
         sendgrid.setApiKey(Apisendgrind);
         console.log(magData.asesor);
         const formulaNueva = {
@@ -232,6 +235,7 @@ async function updateMagiInyDe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sIyD = true;
+        magData.finishDateiyde = new Date();
         sendgrid.setApiKey(Apisendgrind);
         const procesoInyde = {
             to: [...comeEmails, magData.asesor],
@@ -286,6 +290,7 @@ async function updateMagiOpe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sOp = true;
+        magData.finishDateope = new Date();
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe = {
@@ -332,6 +337,7 @@ async function updateMagiCome(req, res) {
         const magData = req.body;
         magData.sCom = true;
         magData.StatusGeneral = "Finalizado";
+        magData.finishDategc = new Date();
         sendgrid.setApiKey(Apisendgrind);
         const formulaNueva = {
             to: magData.asesor,
@@ -377,6 +383,7 @@ async function updateMagisInyDe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sIyD = true;
+        magData.finishDateiyde = new Date();
         sendgrid.setApiKey(Apisendgrind);
         const procesoInyde = {
             to: opeEmails,
@@ -420,6 +427,7 @@ async function updateMagisOpe(req, res) {
         const { id } = req.params;
         const magData = req.body;
         magData.sOp = true;
+        magData.finishDateope = new Date();
         console.log(magData.asesor);
         sendgrid.setApiKey(Apisendgrind);
         const procesoOpe = {
@@ -479,6 +487,7 @@ async function updateMagisCome(req, res) {
         const magData = req.body;
         magData.sCom = true;
         magData.StatusGeneral = "Finalizado";
+        magData.finishDategc = new Date();
         sendgrid.setApiKey(Apisendgrind);
         const formulaNueva = {
             to: magData.asesor,
@@ -537,6 +546,7 @@ async function canceleMag(req, res) {
         magData.sIyD = false
         magData.sOp = false
         magData.sCom = false
+        magData.cancelDate = new Date();
         sendgrid.setApiKey(Apisendgrind)
         console.log(magData.asesor);
         const procesoCancelacion = {

@@ -14,6 +14,9 @@ const SoporteSchema = mongoose.Schema({
     estado: String,
     comentarios: String,
     created_at: Date,
+    MotivoCancel: String,
+    CancelDate: Date,
+    AsignDate: Date
 });
 
 SoporteSchema.plugin(mongoosePaginate);

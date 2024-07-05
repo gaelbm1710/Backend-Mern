@@ -18,6 +18,9 @@ api.delete("/soporte/:id", [md_auth.asureAuth], SoporteController.deleteTicket);
 api.post("/asoporte", [md_auth.asureAuth, upload.single("documentos")], SoporteController.createSoporteconAzure);
 api.get("/asoporte", SoporteController.getSoprteconAzure);
 
+//Cancelar Ticket
+api.patch("/soporte/cancelar/:id", [md_auth.asureAuth], SoporteController.cancelTicket);
+
 //Buscar por dueno
 api.get("/soportes/:dueno", SoporteController.getUsuarioSoporte);
 

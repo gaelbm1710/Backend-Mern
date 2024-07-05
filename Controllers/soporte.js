@@ -26,7 +26,7 @@ async function createSoporteconAzure(req, res) {
         const containerClient = blobService.getContainerClient("ticketsoporte");
         try {
             await containerClient.getBlockBlobClient(originalname).uploadData(buffer);
-            const documentosPath = `soporte/${originalname}`;
+            const documentosPath = `ticketsoporte/${originalname}`;
             soporte.documentos = documentosPath;
         } catch (error) {
             return res.status(400).send({ msg: "Error al subir el archivo" });
@@ -107,7 +107,7 @@ async function getUsuarioSoporte(req, res) {
         res.status(500).send({ msg: "Error en el servidor" })
     }
 }
-
+//UPDATE GENERAL
 async function updateSoporte(req, res) {
     try {
         const { id } = req.params;
@@ -127,6 +127,9 @@ async function updateSoporte(req, res) {
     }
 }
 
+//UPDATE ASIGNADO
+
+
 async function deleteTicket(req, res) {
     const { id } = req.params;
     try {
@@ -141,6 +144,25 @@ async function deleteTicket(req, res) {
     }
 }
 
+async function cancelTicket(req, res) {
+    try {
+        const { id } = req.params
+        const soporteData = req.body;
+        soporteData.estado = 'Cancelado';
+        soporteData.CancelDate = new Date();
+
+        const cancelarticekt = await Soporte.findByIdAndUpdate({ _id: id }, soporteData, { new: true })
+        if (!cancelarticekt) {
+            res.status(404).send({ msg: "Ticket No Encontrado" });
+        } else {
+            res.status(200).send({ msg: "Ticket Cancelado" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualziar la información ", error })
+        console.log(error);
+    }
+}
+
 
 
 module.exports = {
@@ -150,5 +172,6 @@ module.exports = {
     deleteTicket,
     createSoporteconAzure,
     getSoprteconAzure,
-    getUsuarioSoporte
+    getUsuarioSoporte,
+    cancelTicket
 }

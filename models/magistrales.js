@@ -47,7 +47,11 @@ const MagSchema = mongoose.Schema({
     StatusGeneral: String,
     actividad: String,
     comeAsesor: String,
-    MotivoCancel: String
+    MotivoCancel: String,
+    finishDateiyde: Date,
+    finishDateope: Date,
+    finishDategc: Date,
+    cancelDate: Date,
 });
 
 MagSchema.plugin(mongoosePaginate);

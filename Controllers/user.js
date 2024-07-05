@@ -50,10 +50,7 @@ async function getUsers(req, res) {
 
 async function getAdmins(req, res) {
     const { role } = req.query;
-    let query = {};
-    if (active != undefined) {
-        query.role = role;
-    }
+    let query = { role };
     try {
         const response = await User.find(query);
         //console.log(response);
@@ -63,6 +60,26 @@ async function getAdmins(req, res) {
         res.status(500).send({ msg: "Errror al obtener usuarios" })
     }
 }
+
+//Get Sistemas: 
+async function getSistemas(req, res) {
+    const role = "sistemas";
+
+    let query = { role };
+    try {
+        const response = await User.find(query);
+        const trasnformData = response.map(yser => ({
+            key: user._id.toString(),
+            text: `${user.firstname} ${user.lastname}`,
+            value: user._id.toString()
+        }));
+        res.status(200).send(response);
+    } catch (error) {
+        console.error("Error al obtener usuarios", error);
+        res.status(500).send({ msg: "Errror al obtener usuarios" })
+    }
+}
+
 
 async function createUser(req, res) {
     const { password } = req.body;
@@ -261,5 +278,6 @@ module.exports = {
     updateActive,
     uploadBlob,
     getBlob,
-    DownloadBlob
+    DownloadBlob,
+    getSistemas
 }

@@ -16,6 +16,7 @@ api.post("/user", [md_auth.asureAuth, upload.single("avatar")], UserController.c
 api.patch("/user/:id", [md_auth.asureAuth, upload.single("avatar")], UserController.updateUser);
 api.delete("/user/:id", [md_auth.asureAuth], UserController.deleteUser);
 api.get("/user/:role", UserController.getAdmins);
+api.get("/usersoporte/:role", UserController.getSistemas);
 api.get("/userss", UserController.getUsers);
 api.patch("/userr/:id", [md_auth.asureAuth, upload.single("avatar")], UserController.updateActive);
 api.post("/create", upload.single("file"), UserController.uploadBlob);
