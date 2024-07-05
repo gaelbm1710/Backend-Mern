@@ -21,6 +21,7 @@ async function createSoporte(req, res) {
 //Azure Contenedor
 async function createSoporteconAzure(req, res) {
     const soporte = new Soporte({ ...req.body, asignado: 'Sin Asignar', estado: 'Pendiente' });
+    soporte.created_at = new Date();
     if (req.file) {
         const { originalname, buffer } = req.file;
         const containerClient = blobService.getContainerClient("ticketsoporte");
@@ -128,6 +129,21 @@ async function updateSoporte(req, res) {
 }
 
 //UPDATE ASIGNADO
+async function asignTicket(req, res) {
+    try {
+        const { id } = req.params;
+        const soporteData = req.body;
+        soporteData.AsignDate = new Date();
+        const updateSoporte = await Soporte.findByIdAndUpdate({ _id: id }, soporteData);
+        if (!updateSoporte) {
+            res.status(404).send({ msg: "Ticket no encontrado" });
+        } else {
+            res.status(200).send({ msg: "Actualización existosa", updateSoporte });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar", error });
+    }
+}
 
 
 async function deleteTicket(req, res) {
@@ -169,6 +185,7 @@ module.exports = {
     createSoporte,
     getSoporte,
     updateSoporte,
+    asignTicket,
     deleteTicket,
     createSoporteconAzure,
     getSoprteconAzure,
