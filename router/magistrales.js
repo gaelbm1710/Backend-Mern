@@ -14,7 +14,9 @@ api.get("/mag/cardcode/:cardcode", MagController.getMagbyCardcode);
 api.get("/mag/asesor/:asesor", MagController.getMagbyAsesor);
 api.get("/magi", MagController.getMagbyActvidad);
 api.get("/mags", MagController.getMagbyActvidadyAsesor);
-
+api.patch("/savemag/:id", [md_auth.asureAuth], MagController.saveMagIyD);
+api.patch("/savemagi/:id", [md_auth.asureAuth], MagController.saveMagiInyDe);
+api.patch("/savemagis/:id", [md_auth.asureAuth], MagController.saveMagisInyDe);
 
 //OPERACIONES
 api.post("/ope", [md_auth.asureAuth], MagController.createMag);
@@ -44,5 +46,9 @@ api.patch("/mag/cancelacion/:id", [md_auth.asureAuth], MagController.canceleMag)
 
 //Actualizar Mag
 api.patch("/mag/actualizar/:id", [md_auth.asureAuth], MagController.updateMag);
+
+//Envases
+api.get("/envases", MagController.envases);
+
 
 module.exports = api;
