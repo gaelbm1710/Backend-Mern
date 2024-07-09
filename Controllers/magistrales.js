@@ -1,8 +1,11 @@
 const { query } = require("express");
+const sql = require('mssql');
+const { SQL_DATABASE, SQL_PASSWORD, SQL_PORT, SQL_SERVER, SQL_USER } = require("../constants");
 const Mag = require("../models/magistrales");
 const User = require("../models/user");
 const sendgrid = require('@sendgrid/mail');
 const { Apisendgrind, Email, CotizacionNueva, InydeCotizacionNueva, OpeCotizacionNueva, CotizacionFinalizada, InydePresentacionNueva, PresentacionFinalizada, cambioNuevo, CancelMag, InydeCambioNuevo, OpeCambioNueva, CambioFinalizado, PresentacionNueva } = require("../constants")
+
 
 async function createMag(req, res) {
     try {
@@ -109,6 +112,22 @@ async function updateMagInyDe(req, res) {
             }
         }
         sendMail();
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
+async function saveMagIyD(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
         const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
         if (!updateMag) {
             res.status(404).send({ msg: "Cotización no encontrada" })
@@ -283,6 +302,22 @@ async function updateMagiInyDe(req, res) {
     }
 }
 
+async function saveMagiInyDe(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
 async function updateMagiOpe(req, res) {
     try {
         const comes = await User.find({ role: "com" });
@@ -419,6 +454,23 @@ async function updateMagisInyDe(req, res) {
         console.log(error);
     }
 }
+
+async function saveMagisInyDe(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
 
 async function updateMagisOpe(req, res) {
     try {
@@ -699,12 +751,46 @@ async function updateMag(req, res) {
     }
 }
 
+const sqlConfig = {
+    user: SQL_USER,
+    password: SQL_PASSWORD,
+    database: SQL_DATABASE,
+    server: SQL_SERVER,
+    pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000
+    },
+    options: {
+        encrypt: true,
+        trustServerCertificate: true
+    }
+}
+
+const appPool = new sql.ConnectionPool(sqlConfig);
+
+async function envases(req, res) {
+    try {
+        await appPool.connect();
+        const query = `SELECT IndexID, FldValue FROM UFD1 WHERE FieldID = 1 AND TableID = 'RDR1' AND IndexID not in (0,1,2,10)`
+        const consulta = await appPool.request().query(query);
+        res.json(consulta.recordset)
+    } catch (error) {
+        console.error(error);
+        res.status(400).send({ msg: "Error al obtener la información", error })
+    } finally {
+        await appPool.close();
+        console.log("Conexion Cerrada");
+    }
+}
+
 
 
 module.exports = {
     createMag,
     getMag,
     updateMag,
+    saveMagIyD,
     updateMagInyDe,
     updateMagOpe,
     updateMagCome,
@@ -713,11 +799,14 @@ module.exports = {
     getMagbyAsesor,
     getMagbyActvidad,
     getMagbyActvidadyAsesor,
+    saveMagiInyDe,
     updateMagiCome,
     updateMagiInyDe,
     updateMagiOpe,
     updateMagisOpe,
+    saveMagisInyDe,
     updateMagisInyDe,
     updateMagisCome,
-    canceleMag
+    canceleMag,
+    envases
 }

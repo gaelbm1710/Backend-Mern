@@ -68,7 +68,7 @@ async function getSistemas(req, res) {
     let query = { role };
     try {
         const response = await User.find(query);
-        const trasnformData = response.map(yser => ({
+        const trasnformData = response.map(user => ({
             key: user._id.toString(),
             text: `${user.firstname} ${user.lastname}`,
             value: user._id.toString()
