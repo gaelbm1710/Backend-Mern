@@ -753,7 +753,7 @@ depd@~1.1.2:
 
 dependences@^0.0.1-security:
   version "0.0.1-security"
-  resolved "https://registry.npmjs.org/dependences/-/dependences-0.0.1-security.tgz"
+  resolved "https://registry.yarnpkg.com/dependences/-/dependences-0.0.1-security.tgz#d57b849322edd5c98d7207e1e661513ad7f41ebd"
   integrity sha512-sfbyj+9/1JAZJZSHEBbGchyoPwhMzJLw2By3nHoqzqIjVfgnR+7oaZgu2zJFciqTpA/STX02Q3xIwWUjHgq6mA==
 
 dependencies@^0.0.1:
