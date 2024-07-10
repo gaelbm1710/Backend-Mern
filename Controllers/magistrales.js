@@ -174,7 +174,8 @@ async function updateMagOpe(req, res) {
                 precio5: magData.precio5,
                 precio6: magData.precio6,
                 precio7: magData.precio7,
-                precio8: magData.precio8
+                precio8: magData.precio8,
+                Envases: magData.envases
             }
         }
         const sendMail = async () => {
@@ -506,7 +507,8 @@ async function updateMagisOpe(req, res) {
                 precio5: magData.precio5,
                 precio6: magData.precio6,
                 precio7: magData.precio7,
-                precio8: magData.precio8
+                precio8: magData.precio8,
+                Envases: magData.envases
             }
         }
         const sendMail = async () => {

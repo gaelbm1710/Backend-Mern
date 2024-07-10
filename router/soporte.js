@@ -25,6 +25,6 @@ api.patch("/soporte/cancelar/:id", [md_auth.asureAuth], SoporteController.cancel
 api.get("/soportes/:dueno", SoporteController.getUsuarioSoporte);
 
 //Asignar Ticket
-api.patch("/asignticket/:id", [md_auth.asureAuth], SoporteController.asignTicket);
+api.patch("/asignticket/:id", [md_auth.asureAuth, upload.single("documentos")], SoporteController.asignTicket);
 
 module.exports = api;

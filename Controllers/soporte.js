@@ -20,8 +20,7 @@ async function createSoporte(req, res) {
 }
 //Azure Contenedor
 async function createSoporteconAzure(req, res) {
-    const soporte = new Soporte({ ...req.body, asignado: 'Sin Asignar', estado: 'Pendiente' });
-    soporte.created_at = new Date();
+    const soporte = new Soporte({ ...req.body, asignado: 'Sin Asignar', estado: 'Pendiente', created_at: new Date(), prioridad: 'Media' });
     if (req.file) {
         const { originalname, buffer } = req.file;
         const containerClient = blobService.getContainerClient("ticketsoporte");
@@ -47,11 +46,13 @@ async function createSoporteconAzure(req, res) {
 
 async function getSoporte(req, res) {
     const { page = 1, limit = 10 } = req.query;
+    let query = {};
     const options = {
         page,
         limit: parseInt(limit),
+        sort: { fecha: -1 }
     };
-    Soporte.paginate({}, options, (error, soportes) => {
+    Soporte.paginate(query, options, (error, soportes) => {
         if (error) {
             res.status(400).send({ msg: "Error al obtener la información ", error });
         } else {
@@ -134,7 +135,9 @@ async function asignTicket(req, res) {
         const { id } = req.params;
         const soporteData = req.body;
         soporteData.AsignDate = new Date();
-        const updateSoporte = await Soporte.findByIdAndUpdate({ _id: id }, soporteData);
+        //console.log(soporteData.asignado)
+        //console.log(soporteData);
+        const updateSoporte = await Soporte.findByIdAndUpdate({ _id: id }, soporteData, { new: true });
         if (!updateSoporte) {
             res.status(404).send({ msg: "Ticket no encontrado" });
         } else {
@@ -166,7 +169,7 @@ async function cancelTicket(req, res) {
         const soporteData = req.body;
         soporteData.estado = 'Cancelado';
         soporteData.CancelDate = new Date();
-
+        soporteData.asignado = 'Cancelado';
         const cancelarticekt = await Soporte.findByIdAndUpdate({ _id: id }, soporteData, { new: true })
         if (!cancelarticekt) {
             res.status(404).send({ msg: "Ticket No Encontrado" });

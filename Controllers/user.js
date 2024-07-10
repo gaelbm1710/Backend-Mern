@@ -64,15 +64,9 @@ async function getAdmins(req, res) {
 //Get Sistemas: 
 async function getSistemas(req, res) {
     const role = "sistemas";
-
     let query = { role };
     try {
         const response = await User.find(query);
-        const trasnformData = response.map(user => ({
-            key: user._id.toString(),
-            text: `${user.firstname} ${user.lastname}`,
-            value: user._id.toString()
-        }));
         res.status(200).send(response);
     } catch (error) {
         console.error("Error al obtener usuarios", error);

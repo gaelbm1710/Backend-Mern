@@ -12,6 +12,7 @@ const SoporteSchema = mongoose.Schema({
     dueno: String,
     asignado: String,
     estado: String,
+    prioridad: String,
     comentarios: String,
     created_at: Date,
     MotivoCancel: String,
