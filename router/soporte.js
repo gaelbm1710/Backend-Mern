@@ -27,4 +27,7 @@ api.get("/soportes/:dueno", SoporteController.getUsuarioSoporte);
 //Asignar Ticket
 api.patch("/asignticket/:id", [md_auth.asureAuth, upload.single("documentos")], SoporteController.asignTicket);
 
+//Comentarios y respuestas
+
+
 module.exports = api;

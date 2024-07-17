@@ -28,6 +28,9 @@ api.get("/ope/cardcode/:cardcode", MagController.getMagbyCardcode);
 api.get("/ope/asesor/:asesor", MagController.getMagbyAsesor);
 api.get("/opei", MagController.getMagbyActvidad);
 api.get("/opes", MagController.getMagbyActvidadyAsesor);
+api.patch("/saveope/:id", [md_auth.asureAuth], MagController.saveMagOpe);
+api.patch("/saveopei/:id", [md_auth.asureAuth], MagController.saveMagiOpe);
+api.patch("/saveopeis/:id", [md_auth.asureAuth], MagController.saveMagisOpe);
 
 
 //Comercial o Marcela jejej :D
@@ -40,6 +43,9 @@ api.get("/come/cardcode/:cardcode", MagController.getMagbyCardcode);
 api.get("/come/asesor/:asesor", MagController.getMagbyAsesor);
 api.get("/comei", MagController.getMagbyActvidad);
 api.get("/comes", MagController.getMagbyActvidadyAsesor);
+api.patch("/savecome/:id", [md_auth.asureAuth], MagController.saveMagCome);
+api.patch("/savecomei/:id", [md_auth.asureAuth], MagController.saveMagiCome);
+api.patch("/savecomeis/:id", [md_auth.asureAuth], MagController.saveMagisCome);
 
 //Cancelación
 api.patch("/mag/cancelacion/:id", [md_auth.asureAuth], MagController.canceleMag);

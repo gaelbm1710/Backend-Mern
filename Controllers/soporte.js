@@ -50,7 +50,7 @@ async function getSoporte(req, res) {
     const options = {
         page,
         limit: parseInt(limit),
-        sort: { fecha: -1 }
+        sort: { created_at: -1 }
     };
     Soporte.paginate(query, options, (error, soportes) => {
         if (error) {
@@ -92,7 +92,8 @@ async function getUsuarioSoporte(req, res) {
         let query = {};
         const options = {
             page,
-            limit: parseInt(limit)
+            limit: parseInt(limit),
+            sort: { created_at: -1 }
         };
         if (dueno) {
             query.dueno = dueno;
@@ -182,6 +183,38 @@ async function cancelTicket(req, res) {
     }
 }
 
+//Comentarios
+async function addComnentarios(req, res) {
+    try {
+        const { id } = req.params;
+        const soporteData = req.body;
+        const updateSoporte = await Soporte.findByIdAndUpdate({ _id: id }, soporteData, { new: true });
+        if (!updateSoporte) {
+            res.status(404).send({ msg: "Ticket no encontrado" });
+        } else {
+            res.status(200).send({ msg: "Actualización existosa", updateSoporte });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar", error });
+    }
+}
+
+//Respuestas
+async function addRespuesta(req, res) {
+    try {
+        const { id } = req.params;
+        const soporteData = req.body;
+        const updateSoporte = await Soporte.findByIdAndUpdate({ _id: id }, soporteData, { new: true });
+        if (!updateSoporte) {
+            res.status(404).send({ msg: "Ticket no encontrado" });
+        } else {
+            res.status(200).send({ msg: "Actualización existosa", updateSoporte });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar", error });
+    }
+}
+
 
 
 module.exports = {
@@ -193,5 +226,7 @@ module.exports = {
     createSoporteconAzure,
     getSoprteconAzure,
     getUsuarioSoporte,
-    cancelTicket
+    cancelTicket,
+    addComnentarios,
+    addRespuesta
 }

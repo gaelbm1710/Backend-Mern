@@ -52,7 +52,7 @@ const MagSchema = mongoose.Schema({
     finishDateope: Date,
     finishDategc: Date,
     cancelDate: Date,
-    envases: String
+    envases: { type: String, default: "" }
 
 });
 

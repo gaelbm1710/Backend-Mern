@@ -18,6 +18,7 @@ const magistrales = require("./router/magistrales");
 const contabilidad = require("./router/contabilidad");
 const soporte = require("./router/soporte");
 const marketing = require("./router/marketing")
+const commentsRoute = require("./router/comments");
 
 //Body-Parse
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,6 +54,7 @@ app.use(`/api/${API_VERSION}`, magistrales);
 app.use(`/api/${API_VERSION}`, contabilidad);
 app.use(`/api/${API_VERSION}`, soporte);
 app.use(`/api/${API_VERSION}`, marketing)
+app.use(`/api/${API_VERSION}`, commentsRoute);
 
 module.exports = app;
 

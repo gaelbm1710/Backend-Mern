@@ -202,6 +202,22 @@ async function updateMagOpe(req, res) {
     }
 }
 
+async function saveMagOpe(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
 async function updateMagCome(req, res) {
     try {
         const { id } = req.params;
@@ -235,6 +251,22 @@ async function updateMagCome(req, res) {
             }
         }
         sendMail();
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
+async function saveMagCome(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
         const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
         if (!updateMag) {
             res.status(404).send({ msg: "Cotización no encontrada" })
@@ -367,6 +399,22 @@ async function updateMagiOpe(req, res) {
     }
 }
 
+async function saveMagiOpe(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
 async function updateMagiCome(req, res) {
     try {
         const { id } = req.params;
@@ -399,6 +447,22 @@ async function updateMagiCome(req, res) {
             }
         }
         sendMail();
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
+async function saveMagiCome(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
         const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
         if (!updateMag) {
             res.status(404).send({ msg: "Cotización no encontrada" })
@@ -535,6 +599,22 @@ async function updateMagisOpe(req, res) {
     }
 }
 
+async function saveMagisOpe(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
 async function updateMagisCome(req, res) {
     try {
         const { id } = req.params;
@@ -578,6 +658,24 @@ async function updateMagisCome(req, res) {
     }
 }
 
+async function saveMagisCome(req, res) {
+    try {
+        const { id } = req.params;
+        const magData = req.body;
+        const updateMag = await Mag.findByIdAndUpdate({ _id: id }, magData, { new: true });
+        if (!updateMag) {
+            res.status(404).send({ msg: "Cotización no encontrada" })
+        } else {
+            res.status(200).send({ msg: "Actualziación Exitosa" });
+        }
+    } catch (error) {
+        res.status(400).send({ msg: "Error al actualizar la información" });
+        console.log(error);
+    }
+}
+
+
+/////
 async function deleteMag(req, res) {
     const { id } = req.params;
     try {
@@ -793,6 +891,8 @@ module.exports = {
     getMag,
     updateMag,
     saveMagIyD,
+    saveMagOpe,
+    saveMagCome,
     updateMagInyDe,
     updateMagOpe,
     updateMagCome,
@@ -802,11 +902,15 @@ module.exports = {
     getMagbyActvidad,
     getMagbyActvidadyAsesor,
     saveMagiInyDe,
+    saveMagiOpe,
+    saveMagiCome,
     updateMagiCome,
     updateMagiInyDe,
     updateMagiOpe,
     updateMagisOpe,
     saveMagisInyDe,
+    saveMagisOpe,
+    saveMagisCome,
     updateMagisInyDe,
     updateMagisCome,
     canceleMag,
