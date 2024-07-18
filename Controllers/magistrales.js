@@ -862,7 +862,7 @@ const sqlConfig = {
         idleTimeoutMillis: 100000
     },
     options: {
-        encrypt: true,
+        encrypt: false,
         enableArithAbort: true,
         trustServerCertificate: true,
         connectTimeout: 100000,
