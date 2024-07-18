@@ -1,6 +1,8 @@
 const { query } = require("express");
-const sql = require('mssql');
-const { SQL_DATABASE, SQL_PASSWORD, SQL_PORT, SQL_SERVER, SQL_USER } = require("../constants");
+//const sql = require('mssql');
+//const { SQL_DATABASE, SQL_PASSWORD, SQL_PORT, SQL_SERVER, SQL_USER } = require("../constants");
+const { PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE, PG_PORT } = require("../constants");
+const { Pool } = require('pg');
 const Mag = require("../models/magistrales");
 const User = require("../models/user");
 const sendgrid = require('@sendgrid/mail');
@@ -851,38 +853,22 @@ async function updateMag(req, res) {
     }
 }
 
-const sqlConfig = {
-    user: SQL_USER,
-    password: SQL_PASSWORD,
-    database: SQL_DATABASE,
-    server: SQL_SERVER,
-    port: 1433,
-    pool: {
-        max: 10,
-        min: 0,
-        idleTimeoutMillis: 40000
-    },
-    options: {
-        encrypt: false,
-        trustServerCertificate: true,
-        connectTimeout: 40000,
-    }
-}
-
-const appPool = new sql.ConnectionPool(sqlConfig);
+const pool = new Pool({
+    user: PG_USER,
+    host: PG_HOST,
+    database: PG_DATABASE,
+    password: PG_PASSWORD,
+    port: PG_PORT
+})
 
 async function envases(req, res) {
     try {
-        await appPool.connect();
-        const query = `SELECT IndexID, FldValue FROM UFD1 WHERE FieldID = 1 AND TableID = 'RDR1' AND IndexID not in (0,1,2,10)`
-        const consulta = await appPool.request().query(query);
-        res.json(consulta.recordset)
+        const query = `SELECT fieldid, value FROM containerlabelcatalog WHERE fieldid <> 2 `
+        const consulta = await pool.query(query);
+        res.json(consulta.rows)
     } catch (error) {
         console.error(error);
         res.status(400).send({ msg: "Error al obtener la información", error })
-    } finally {
-        await appPool.close();
-        console.log("Conexion Cerrada");
     }
 }
 
