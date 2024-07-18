@@ -859,11 +859,13 @@ const sqlConfig = {
     pool: {
         max: 10,
         min: 0,
-        idleTimeoutMillis: 30000
+        idleTimeoutMillis: 40000
     },
     options: {
         encrypt: true,
-        trustServerCertificate: true
+        enableArithAbort: true,
+        trustServerCertificate: true,
+        connectTimeout: 40000
     }
 }
 
