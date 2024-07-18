@@ -865,7 +865,8 @@ const sqlConfig = {
         encrypt: true,
         enableArithAbort: true,
         trustServerCertificate: true,
-        connectTimeout: 40000
+        connectTimeout: 40000,
+        port: SQL_PORT
     }
 }
 
