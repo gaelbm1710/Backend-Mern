@@ -856,7 +856,7 @@ const sqlConfig = {
     password: SQL_PASSWORD,
     database: SQL_DATABASE,
     server: SQL_SERVER,
-    port: SQL_PORT,
+    port: 1433,
     pool: {
         max: 10,
         min: 0,
