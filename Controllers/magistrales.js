@@ -856,17 +856,16 @@ const sqlConfig = {
     password: SQL_PASSWORD,
     database: SQL_DATABASE,
     server: SQL_SERVER,
+    port: SQL_PORT,
     pool: {
         max: 10,
         min: 0,
-        idleTimeoutMillis: 100000
+        idleTimeoutMillis: 40000
     },
     options: {
         encrypt: false,
-        enableArithAbort: true,
         trustServerCertificate: true,
-        connectTimeout: 100000,
-        port: 1433
+        connectTimeout: 40000,
     }
 }
 
