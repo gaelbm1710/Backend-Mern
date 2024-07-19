@@ -28,6 +28,8 @@ api.get("/soportes/:dueno", SoporteController.getUsuarioSoporte);
 api.patch("/asignticket/:id", [md_auth.asureAuth, upload.single("documentos")], SoporteController.asignTicket);
 
 //Comentarios y respuestas
+//api.patch("/soporte/comentario/:id", [md_auth.asureAuth], SoporteController.addComnentarios)
+//api.patch("/soporte/comentario/:id/reply", [md_auth.asureAuth], SoporteController.addRespuesta);
 
 
 module.exports = api;

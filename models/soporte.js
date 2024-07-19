@@ -1,18 +1,6 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
-const RespuestoSchema = mongoose.Schema({
-    author: String,
-    respuesta: String,
-    response_at: { type: Date, default: Date.now }
-})
-
-const ComentariosSchema = mongoose.Schema({
-    author: String,
-    comentario: String,
-    created_at: { type: Date, default: Date.now },
-    respuestas: [RespuestoSchema]
-});
 
 const SoporteSchema = mongoose.Schema({
     folio: {
@@ -31,8 +19,7 @@ const SoporteSchema = mongoose.Schema({
     CancelDate: Date,
     Cancelby: String,
     AsignDate: Date,
-    comentarios: [ComentariosSchema],
-
+    comentarios: []
 });
 
 SoporteSchema.plugin(mongoosePaginate);

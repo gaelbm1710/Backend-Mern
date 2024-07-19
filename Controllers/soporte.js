@@ -182,38 +182,37 @@ async function cancelTicket(req, res) {
         console.log(error);
     }
 }
-
+/*
 //Comentarios
 async function addComnentarios(req, res) {
     try {
-        const { id } = req.params;
-        const soporteData = req.body;
-        const updateSoporte = await Soporte.findByIdAndUpdate({ _id: id }, soporteData, { new: true });
-        if (!updateSoporte) {
-            res.status(404).send({ msg: "Ticket no encontrado" });
-        } else {
-            res.status(200).send({ msg: "Actualización existosa", updateSoporte });
+        const soporteId = req.params.id;
+        const comentario = req.body;
+        console.log("Comentario: ", comentario);
+        if (!comentario || typeof comentario !== 'object' || Array.isArray(comentario)) {
+            return res.status(400).send({ msg: "Comentario inválido" });
         }
+        console.log("Req.body", req.body);
+        const soporte = await Soporte.findById(soporteId);
+        console.log(soporte);
+        if (!soporte) {
+            return res.status(404).send({ msg: "Ticket no encontrado" });
+        }
+        soporte.comentarios.push(comentario);
+        const comentarioUpdated = await soporte.save();
+        console.log(comentarioUpdated);
+        res.status(200).send({ msg: "Comentario creado", comentarioUpdated });
     } catch (error) {
-        res.status(400).send({ msg: "Error al actualizar", error });
+        res.status(400).send({ msg: "Error al crear el comentario", error });
     }
 }
 
+
 //Respuestas
 async function addRespuesta(req, res) {
-    try {
-        const { id } = req.params;
-        const soporteData = req.body;
-        const updateSoporte = await Soporte.findByIdAndUpdate({ _id: id }, soporteData, { new: true });
-        if (!updateSoporte) {
-            res.status(404).send({ msg: "Ticket no encontrado" });
-        } else {
-            res.status(200).send({ msg: "Actualización existosa", updateSoporte });
-        }
-    } catch (error) {
-        res.status(400).send({ msg: "Error al actualizar", error });
-    }
+
 }
+*/
 
 
 
@@ -227,6 +226,6 @@ module.exports = {
     getSoprteconAzure,
     getUsuarioSoporte,
     cancelTicket,
-    addComnentarios,
-    addRespuesta
+    //addComnentarios,
+    //addRespuesta
 }
